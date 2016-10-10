@@ -297,7 +297,7 @@ ul.tabs li.current{
     height:     100%;
     width:      100%;
     background: rgba( 255, 255, 255, .7 )
-                url('http://www2.shutterstock.com/webstack/img/loading.gif')
+                url('/static/images/loadinggreen.gif')
                 50% 50%
                 no-repeat;
 }
