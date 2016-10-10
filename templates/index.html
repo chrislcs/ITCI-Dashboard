@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MVP Dashboard</title>
+    <link rel="stylesheet" href="../static/lib/leaflet.css" />
+    <link rel="stylesheet" href="../static/lib/leaflet.draw.css" />
+    <link rel="stylesheet" href="../static/lib/dc.min.css" />
+    <link rel="stylesheet" href="../static/lib/jquery-ui.min.css" />
+
+    <link rel="stylesheet" href="../static/css/dashboard.css" />
+
+    <script src="../static/lib/jquery-2.2.2.min.js"></script>
+    <script src="../static/lib/leaflet.js"></script>
+    <script src="../static/lib/leaflet.draw.js"></script>
+    <script src="../static/lib/d3.min.js"></script>
+    <script src="../static/lib/d3-queue.v2.min.js"></script>
+    <script src="../static/lib/crossfilter.min.js"></script>
+    <script src="../static/lib/dc.min.js"></script>
+    <script src="../static/lib/turf.min.js"></script>
+    <script src="../static/lib/jquery-ui.min.js"></script>
+
+    <script src="../static/lib/linked-rowchart.js"></script>
+
+</head>
+<body>
+    <div class="container">
+        <ul class="tabs">
+            <li class="tab-link current" data-tab="tab-1">Dashboard</li>
+		    <li class="tab-link" data-tab="tab-2">Recipes</li>
+        </ul>
+
+        <div id="tab-1" class="tab-content current">
+            <div class="map-column">
+                <div class="map-wrapper">
+                    <!--<div class="map-title">-->
+                        <!--Total area per land use-->
+                    <!--</div>-->
+                    <div class="map-stage">
+                        <div id="mapid"></div>
+                    </div>
+                </div>
+                <div class="input">Landuse: <input type="text" id="landuse" value="Recipe 1" />
+                <button type="button" id="add-scenario">Add Scenario</button>
+                <button type="button" id="reload-data" onclick="reloadData()">Reload Data</button></div>
+            </div>
+            <div class="left-column">
+                <div class="chart-wrapper">
+                    <div class="chart-title">
+                        Area per land use
+                    </div>
+                    <div class="full-chart-stage">
+                        <div id="area-chart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="middle-column">
+                <div class="chart-wrapper">
+                    <div class="chart-title" id="by-year-bar-chart-title">
+                        Biomass by year
+                    </div>
+                    <div class="full-chart-stage">
+                        <div id="biomass-year-chart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="right-column">
+                <div class="indicator-chart-wrapper">
+                    <div class="column-title">
+                        Indicators
+                    </div>
+                    <div class="chart-stage">
+                        <div class="chart-title">Biomass</div>
+                        <div id="biomass-chart"></div>
+                    </div>
+                    <div class="chart-stage">
+                        <div class="chart-title">Jobs</div>
+                        <div id="jobs-chart"></div>
+                    </div>
+                    <div class="chart-stage">
+                        <div class="chart-title">Test</div>
+                        <div id="test-chart"></div>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <div class="chart-title">
+                        Profit by year (&euro;)
+                    </div>
+                    <div class="full-chart-stage">
+                        <div id="profit-chart"></div>
+                    </div>
+                </div>
+                <div class="slider-wrapper">
+                    <div class="slider-title">
+                        Price of biomass (&euro;/kg)
+                    </div>
+                    <div class="slider">
+                        <div id="biomass-slider">
+                        <input type="text" id="biomass-price" class="slider-value" readonly>
+                        </div>
+                    </div>
+
+                    <div class="slider-title">
+                        Price of oil (&euro;/barrel)
+                    </div>
+                    <div class="slider">
+                        <div id="oil-slider">
+                        <input type="text" id="oil-price" class="slider-value" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-2" class="tab-content">
+            <h2>Recipes:</h2>
+            <div id="accordion" class="recipes"></div>
+            <INPUT type="button" value="+" id="addRecipe" />
+            <INPUT type="button" value="Confirm Recipes" onclick="confirmRecipes()" />
+        </div>
+    </div>
+
+    <div class="load-screen"></div>
+
+    <script src='../static/js/main.js' type='text/javascript'> </script>
+    <script src='../static/js/recipes.js' type='text/javascript'> </script>
+    <script src='../static/js/charts-base.js' type='text/javascript'> </script>
+    <script src='../static/js/map.js' type='text/javascript'> </script>
+    <script src='../static/js/add-data.js' type='text/javascript'> </script>
+    <script src='../static/js/xfilter.js' type='text/javascript'> </script>
+    <script src='../static/js/charts.js' type='text/javascript'> </script>
+    <script src='../static/js/sliders.js' type='text/javascript'> </script>
+    <script src='../static/js/map-interactivity.js' type='text/javascript'> </script>
+</body>
+</html>

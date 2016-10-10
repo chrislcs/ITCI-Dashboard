@@ -1,0 +1,303 @@
+/*html, body {*/
+/*height: 100%;*/
+/*}*/
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    /*background-color: #ebebeb;*/
+}
+
+.container {
+    position: relative;
+    width: 1080px;
+    height: 1080px;
+    margin: 0 auto;
+}
+
+ul.tabs{
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+}
+
+ul.tabs li{
+    background: none;
+    color: #222;
+    display: inline-block;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+ul.tabs li.current{
+    background: #ededed;
+    color: #222;
+}
+
+.tab-content{
+    display: none;
+    background: #ededed;
+    padding: 15px;
+}
+
+.tab-content.current{
+    display: inherit;
+    height: inherit;
+}
+
+.map-column {
+    position: absolute;
+    left: 20px;
+    width: 690px;
+}
+
+.left-column {
+    position: absolute;
+    top: 506px;
+    left: 20px;
+    width: 340px;
+}
+
+.middle-column {
+    position: absolute;
+    top: 506px;
+    left: 370px;
+    width: 340px;
+}
+
+.right-column {
+    position: absolute;
+    left: 720px;
+    width: 340px;
+    /*padding: 5px*/
+}
+
+.map-wrapper {
+    height: 405px;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #e2e2e2;
+    border-radius: 3px;
+    margin-bottom: 10px;
+}
+.map-wrapper .map-title {
+    border-bottom: 1px solid #d7d7d7;
+    /*color: #666;*/
+    font-size: 14px;
+    font-weight: 200;
+    padding: 7px 10px 4px;
+}
+
+.map-wrapper .map-stage {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    /*padding: 5px 5px 5px 5px;*/
+    position: relative;
+}
+
+#mapid {
+    height: 100%;
+    width: 100%;
+    /*padding: 7px 10px 4px;*/
+    /*position: absolute;*/
+    /*top: 0px; bottom: 0px; left: 0px; right: 0px;*/
+}
+
+.leaflet-container{
+    border-radius: 3px;
+}
+
+.leaflet-container .leaflet-control-attribution {
+    font-size: 8px;
+}
+
+.info {
+    padding: 4px 6px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 3px;
+}
+
+.legend {
+    line-height: 14px;
+    color: #555;
+    font-size: 8px;
+}
+
+.legend i {
+    width: 12px;
+    height: 12px;
+    float: left;
+    margin-right: 6px;
+    opacity: 0.7;
+}
+
+.chart-wrapper {
+    height: 300px;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #e2e2e2;
+    border-radius: 3px;
+    margin-bottom: 10px;
+}
+
+.chart-wrapper .chart-title {
+    height: 25px;
+    border-bottom: 1px solid #d7d7d7;
+    /*color: #666;*/
+    font-size: 16px;
+    font-weight: 200;
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+.chart-wrapper .full-chart-stage {
+    height: 250px;
+    width: 100%;
+    /*overflow: hidden;*/
+    /*padding-top: 5px;*/
+    /*padding-bottom: 5px;*/
+    padding: 10px;
+}
+
+.indicator-chart-wrapper {
+    height: 440px;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #e2e2e2;
+    border-radius: 3px;
+    margin-bottom: 10px;
+}
+.indicator-chart-wrapper .column-title {
+    height: 25px;
+    border-bottom: 1px solid #d7d7d7;
+    /*color: #666;*/
+    font-size: 16px;
+    font-weight: 200;
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+.indicator-chart-wrapper .chart-stage {
+    height: 120px;
+    width: 100%;
+    /*overflow: hidden;*/
+    padding-top: 5px;
+    /*padding-bottom: 5px;*/
+}
+
+.indicator-chart-wrapper .chart-title {
+    position: absolute;
+    padding-left: 10px;
+    font-size: 14px;
+}
+
+.slider-wrapper {
+    height: 300px;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #e2e2e2;
+    border-radius: 3px;
+    margin-bottom: 10px;
+}
+
+.slider-wrapper .slider {
+    width: 200px;
+    margin-left: 10px;
+}
+
+.slider-wrapper .slider-title {
+    padding: 10px;
+    font-size: 14px;
+}
+
+.slider-wrapper .slider-value {
+    position: absolute;
+    top: -6px;
+    left: 220px;
+    width: 50px;
+    border: 0;
+}
+
+#area-chart {
+    height: 100%;
+    width: 100%;
+}
+
+#biomass-chart {
+    height: 100%;
+    width: 100%;
+}
+
+#jobs-chart {
+    height: 100%;
+    width: 100%;
+}
+
+#test-chart {
+    height: 100%;
+    width: 100%;
+}
+
+#biomass-year-chart {
+    height: 100%;
+    width: 100%;
+}
+
+.dc-chart g.row text {fill: black;}
+.dc-chart text.pie-slice {
+    fill: black;
+    font-size: 8px;
+}
+
+.input {
+    margin-bottom: 10px;
+}
+
+.edit {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 2px 2px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 10px;
+    margin-right: 5px;
+}
+
+.custom-popup .leaflet-popup-content-wrapper {
+    background:#2c3e50;
+    color:#fff;
+    font-size:13px;
+    border-radius: 3px;
+}
+
+.custom-popup .leaflet-popup-tip-container {
+    width:30px;
+    height:15px;
+}
+.custom-popup .leaflet-popup-tip {
+    background:#2c3e50;
+    color:#fff;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+    top: -5px;
+    right: -5px;
+}
+
+.load-screen {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .7 )
+                url('http://www2.shutterstock.com/webstack/img/loading.gif')
+                50% 50%
+                no-repeat;
+}
