@@ -109,7 +109,8 @@ $('#add-scenario').bind('click', function () {
 
 $('#mapid').on('click', '.edit', function () {
     var newLanduse = prompt("Enter a new land use");
-    if (newLanduse != null) {
+    //console.log(Object.keys(recipes));
+    if (Object.keys(recipes).indexOf(newLanduse)>=0) {
         // update legend entries
         landuses[currentLayer][geolayers[currentLayer]._layers[lastClickedFeature].feature.properties.landuse]--;
         if (landuses[currentLayer][geolayers[currentLayer]._layers[lastClickedFeature].feature.properties.landuse] === 0) {
@@ -155,4 +156,5 @@ $('#mapid').on('click', '.edit', function () {
         FIDDim.filterAll();
         dc.redrawAll();
     }
+    else{alert('Recipe not found, check recipes tab for names')}
 });
