@@ -83,3 +83,4 @@ var legend;
 var drawControl;
 var biomassPrice = 50;
 var oilPrice = 50;
+var crops = ["Cassava", "SugarPalm", "OilPalm"];

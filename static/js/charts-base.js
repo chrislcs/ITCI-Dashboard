@@ -66,12 +66,12 @@ function createBarChart(chart, dimension, group, minX, maxX, stack, stackOn) {
                 return d.key + '[' + [this.layer] + ']: ' + d.value[this.layer];
             });
 
-        for (var k in stack) {
-            if (stack.hasOwnProperty(k)) {
-                if (k!==stackOn) {
-                    chart.stack(group, k, sel_stack(k));
+        //for (var k in stack) {
+        //    if (stack.hasOwnProperty(k)) {
+        for (var i=0; i<stack.length; i++) {
+                if (stack[i]!==stackOn) {
+                    chart.stack(group, stack[i], sel_stack(stack[i]));
                 }
-            }
         }
     }
 

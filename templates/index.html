@@ -57,10 +57,18 @@
             <div class="middle-column">
                 <div class="chart-wrapper">
                     <div class="chart-title" id="by-year-bar-chart-title">
-                        Biomass by year
+                        Biomass per recipe
                     </div>
                     <div class="full-chart-stage">
-                        <div id="biomass-year-chart"></div>
+                        <div id="biomass-recipe-chart"></div>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <div class="chart-title">
+                        Biomass per crop
+                    </div>
+                    <div class="full-chart-stage">
+                        <div id="biomass-crop-chart"></div>
                     </div>
                 </div>
             </div>
@@ -116,7 +124,7 @@
             <h2>Recipes:</h2>
             <div id="accordion" class="recipes"></div>
             <INPUT type="button" value="+" id="addRecipe" />
-            <INPUT type="button" value="Confirm Recipes" onclick="confirmRecipes()" />
+            <INPUT type="button" value="Confirm Recipes" onclick="confirmRecipes(true)" />
         </div>
     </div>
 

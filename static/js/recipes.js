@@ -193,13 +193,16 @@ function tableToJson(table) {
     return data;
 }
 
-function confirmRecipes() {
+function confirmRecipes(reload) {
     for (var recipeID = 1; recipeID <= recipeCount; recipeID++) {
         var table = document.getElementById("Recipe-" + recipeID);
         var recipeName = document.getElementById("Recipe-" + recipeID + "-Name").value;
         recipes[recipeName] = tableToJson(table);
     }
-    reloadData()
+
+    if (reload === true) {
+        reloadData()
+    }
 }
 
 $(document).ready( function() {
@@ -208,12 +211,7 @@ $(document).ready( function() {
         addRecipe();
         setRecipe("Recipe-" + i, recipes["Recipe " + i]);
     }
-    for (var recipeID = 1; recipeID <= recipeCount; recipeID++) {
-        var table = document.getElementById("Recipe-" + recipeID);
-        var recipeName = document.getElementById("Recipe-" + recipeID + "-Name").value;
-        recipes[recipeName] = tableToJson(table);
-    }
-
+    confirmRecipes();
 });
 
 function reloadData() {
