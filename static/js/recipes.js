@@ -199,7 +199,7 @@ function confirmRecipes() {
         var recipeName = document.getElementById("Recipe-" + recipeID + "-Name").value;
         recipes[recipeName] = tableToJson(table);
     }
-
+    reloadData()
 }
 
 $(document).ready( function() {
@@ -208,26 +208,30 @@ $(document).ready( function() {
         addRecipe();
         setRecipe("Recipe-" + i, recipes["Recipe " + i]);
     }
-    console.log(geolayers[currentLayer]);
-    confirmRecipes();
+    for (var recipeID = 1; recipeID <= recipeCount; recipeID++) {
+        var table = document.getElementById("Recipe-" + recipeID);
+        var recipeName = document.getElementById("Recipe-" + recipeID + "-Name").value;
+        recipes[recipeName] = tableToJson(table);
+    }
 
 });
 
-//function reloadData() {
-//    data = [];
-//    for (var i=1; i<geolayers.length; i++){
-//        for (var feature in geolayers[i]._layers) {
-//            if (geolayers[i]._layers.hasOwnProperty(feature)) {
-//                retrieveData(feature.feature, data, i + 1);
-//            }
-//        }
-//    }
-//    function resetChart
-//    //FIDDim.filterAll();
-//    //landuseDim.filterAll();
-//    //scenarioDim.filterAll();
-//    //yearDim.filterAll();
-//    cf.remove();
-//    cf.add(data)
-//    dc.redrawAll();
-//}
+function reloadData() {
+    data = [];
+    for (var i=0; i<geolayers.length; i++){
+        Object.keys(geolayers[i]._layers).forEach(function (key, index) {
+            retrieveData(geolayers[i]._layers[key]['feature'], data, i+1);
+        });
+    }
+
+    function removeData(ndx, dimensions) {
+        dimensions.forEach(function (dim) {
+            dim.filter(null)
+        });
+        ndx.remove();
+    }
+
+    removeData(cf, [FIDDim, landuseDim, scenarioDim, yearDim]);
+    cf.add(data);
+    dc.redrawAll();
+}
