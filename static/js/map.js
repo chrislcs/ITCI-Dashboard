@@ -10,6 +10,11 @@ var aerial = new L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.p
     accessToken: 'pk.eyJ1IjoiY2x1Y2FzIiwiYSI6ImNpbGt6dGd5ajAwMXV1YWx6YXRpYjlmYTAifQ.jS-ZW_hgyB6RIElxVQ8V5g'
 });
 
+var terrain = new L.tileLayer('https://api.mapbox.com/styles/v1/hertshoorn/city5smjk00aa2itbe6ae83bc/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGVydHNob29ybiIsImEiOiJjaXNuZW1jYjMwMDB3MnhrMWd1ZHZ6ODd4In0.ud2kfxoF2nh9bACEipQDnA', {
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+    maxZoom: 18
+});
+
 var DEM = new L.TileLayer.WMS('http://localhost:8080/geoserver/ITCI_Dashboard/wms', {
     layers: 'ITCI_Dashboard:DEM',
     styles: '',
@@ -21,11 +26,12 @@ var DEM = new L.TileLayer.WMS('http://localhost:8080/geoserver/ITCI_Dashboard/wm
 
 var map = L.map('mapid', {
     crs: L.CRS.EPSG4326,
-    layers: [aerial, DEM]
+    layers: [terrain, aerial, DEM]
 }).setView([-0.85, 116.616], 11);
 
 var baseMaps = {
-    "Aerial Photo": aerial
+    "Aerial Photo": aerial,
+    "Terrain Layer" : terrain
 };
 
 var overlayMaps = {
