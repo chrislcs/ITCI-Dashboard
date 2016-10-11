@@ -65,9 +65,9 @@ function loadShape(url) {
 }
 
 var recipes = {
-    "Recipe 1":[{"crop":"Cassava", "startYear":0, "endYear":20, "efficiency":80}, {"crop":"SugarPalm", "startYear":0, "endYear":20, "efficiency":100}],
-    "Recipe 2":[{"crop":"OilPalm", "startYear":0, "endYear":20, "efficiency":100}],
-    "Recipe 3":[{"crop":"Cassava", "startYear":0, "endYear":20, "efficiency":100}]
+    "Recipe 1":[{"crop":"Cassava", "startYear":1, "endYear":9, "efficiency":80}, {"crop":"SugarPalm", "startYear":1, "endYear":20, "efficiency":100}],
+    "Recipe 2":[{"crop":"OilPalm", "startYear":1, "endYear":20, "efficiency":100}],
+    "Recipe 3":[{"crop":"Cassava", "startYear":5, "endYear":15, "efficiency":100}]
 };
 var outline = loadShape('../static/data/ITCI_Boundary.geojson');
 var shapes = [loadShape('../static/data/Scenario1.geojson')];
@@ -84,5 +84,5 @@ var drawControl;
 var cassavaPrice = 350;
 var palmoilPrice = 580;
 var palmsugarPrice = 668;
-var oilPrice = 50;
+//var oilPrice = 50;
 var crops = ["Cassava", "SugarPalm", "OilPalm"];

@@ -41,7 +41,7 @@ function addRecipe() {
         '<TR><TD><SELECT id="Recipe-' + recipeCount + '-Select-1" class="crop-select"><OPTION value="Cassava">Cassava</OPTION>' +
         '<OPTION value="SugarPalm">SugarPalm</OPTION>' +
         '<OPTION value="OilPalm">OilPalm</OPTION></SELECT></TD>' +
-        '<TD><INPUT id="Recipe-' + recipeCount + '-StartYear-1" class="start-year" type="number" value="0"/></TD>' +
+        '<TD><INPUT id="Recipe-' + recipeCount + '-StartYear-1" class="start-year" type="number" value="1"/></TD>' +
         '<TD><INPUT id="Recipe-' + recipeCount + '-EndYear-1" class="end-year" type="number" value="20"/></TD>' +
         '<TD><INPUT id="Recipe-' + recipeCount + '-Efficiency-1" class="efficiency" type="number" value="100"/></TD>' +
         '<td><INPUT class="remove-button" id="Recipe-' + recipeCount + '-Remove-1" type="button" value="-"' +
@@ -108,7 +108,7 @@ function addCrop(tableID) {
                 newcell.childNodes[0].id = "Recipe-" + tableNumber + "-Select-" + rowCount;
                 break;
             case "start-year":
-                newcell.childNodes[0].value = "0";
+                newcell.childNodes[0].value = "1";
                 newcell.childNodes[0].id = "Recipe-" + tableNumber + "-StartYear-" + rowCount;
                 break;
             case "end-year":

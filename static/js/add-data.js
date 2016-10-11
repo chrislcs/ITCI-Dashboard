@@ -52,16 +52,38 @@ function retrieveData(feature, array, scenario) {
         for (var y = 1; y < 21; y++) {
             for (var crop in recipeData) {
                 if (recipeData.hasOwnProperty(crop)) {
-                    array.push({
-                        "FID": FID,
-                        "year": y,
-                        "scenario": scenario,
-                        "landuse": feature["properties"]["landuse"],
-                        "area": area,
-                        "crop": crop,
-                        "biomass": recipeData[crop][y]["sum"],
-                        "jobs": (Math.random() * area) / (100000 * 20)
-                    });
+                    var currentRecipe = recipes[feature["properties"]["landuse"]];
+                    for (var i= 0; i<currentRecipe.length; i++) {
+                        if (currentRecipe[i]['crop'] === crop) {
+                            var efficiency = currentRecipe[i]['efficiency'] / 100.0;
+                            var startYear = currentRecipe[i]['startYear'];
+                            var endYear = currentRecipe[i]['endYear'];
+                        }
+                    }
+
+                    if (y >= startYear && y <= endYear) {
+                        array.push({
+                            "FID": FID,
+                            "year": y,
+                            "scenario": scenario,
+                            "landuse": feature["properties"]["landuse"],
+                            "area": area,
+                            "crop": crop,
+                            "biomass": recipeData[crop][y-startYear+1]["sum"] * efficiency,
+                            "jobs": (Math.random() * area) / (100000 * 20)
+                        });
+                    } else {
+                        array.push({
+                            "FID": FID,
+                            "year": y,
+                            "scenario": scenario,
+                            "landuse": feature["properties"]["landuse"],
+                            "area": area,
+                            "crop": crop,
+                            "biomass": 0,
+                            "jobs": 0
+                        });
+                    }
                 }
             }
         }
