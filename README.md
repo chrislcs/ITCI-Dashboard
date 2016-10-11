@@ -20,9 +20,6 @@ In short: [Precalculated maximum crop yield per ha in database in raster format]
   - Removing price of biomass slider.
    
 # Bugs:
-  - Clicking the piechart and consequently altering the recipe of a polygon results in loss of variable values.
+  - Clicking the piechart and consequently adding a scenario will result in a bugged biomass per recipe chart
   - Editing recipes-> when removing crops the table resets.
-  - Recipes do not work with varying starting years.
-  - Efficiency of crops in recipe does not work.
-  - Price of biomass and oil sliders mess up the graph of annual profit.
   - 
