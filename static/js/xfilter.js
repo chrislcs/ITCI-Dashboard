@@ -19,7 +19,15 @@ var yearDim = cf.dimension(function (d) { return d.year; });
 var areaSum = landuseDim.group().reduceSum(function (d) { return d.area; });
 var biomassSum = scenarioDim.group().reduceSum(function (d) { return d.biomass });
 var jobsSum = scenarioDim.group().reduceSum(function (d) { return d.jobs; });
-var profitByYear = yearDim.group().reduceSum(function (d) { return d.biomass * biomassPrice - d.area * oilPrice * 0.01; });
+var profitByYear = yearDim.group().reduceSum(function (d) {
+    if (d.crop === "Cassava") {
+        return d.biomass * cassavaPrice;
+    } else if (d.crop === "SugarPalm") {
+        return d.biomass * palmsugarPrice;
+    } else if (d.crop === "OilPalm") {
+        return d.biomass * palmoilPrice;
+    }
+});
 var biomassByRecipeStack = yearDim.group().reduce(
     function (p, v) {
         p[v.landuse] = (p[v.landuse] || 0) + v.biomass;
