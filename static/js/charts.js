@@ -16,6 +16,8 @@ var biomassPerRecipeChart = dc.barChart("#biomass-recipe-chart");
 var profitChart = dc.lineChart("#profit-chart");
 var biomassPerCropChart = dc.barChart("#biomass-crop-chart");
 
+var chartList = [areaChart, biomassChart, jobsChart, biomassPerRecipeChart, profitChart, biomassPerCropChart];
+
 createPieChart(areaChart, landuseDim, areaSum);
 createLinkedRowChart(biomassChart, scenarioDim, biomassSum, syncGroup, "#33a02c");
 createLinkedRowChart(jobsChart, scenarioDim, jobsSum, syncGroup, "#1f78b4");

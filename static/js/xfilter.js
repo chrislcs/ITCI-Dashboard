@@ -65,8 +65,11 @@ var jobsByYearStack = yearDim.group().reduce(
 );
 
 
-function removeFilters(dimensions) {
+function removeFilters(dimensions, charts) {
     dimensions.forEach(function (dim) {
         dim.filter(null)
     });
+    charts.forEach(function (chart) {
+        chart.filter(null)
+    })
 }

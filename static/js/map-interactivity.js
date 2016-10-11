@@ -54,7 +54,9 @@ map.on('draw:created', function (e) {
 });
 
 map.on('draw:deleted', function (e) {
-    removeFilters(dimensionList);
+    // remove all current filters on dimensions and charts
+    removeFilters(dimensionList, chartList);
+
     for (var layer in e.layers._layers) {
         if (e.layers._layers.hasOwnProperty(layer)) {
             // delete the data of deleted layers from the crossfilter
@@ -69,12 +71,14 @@ map.on('draw:deleted', function (e) {
         }
     }
     FIDDim.filterAll();
+
+    // redraw charts and legend
     dc.redrawAll();
     legend = updateLegend(legend, Object.keys(landuses[currentLayer]));
 });
 
 $('#add-scenario').bind('click', function () {
-    removeFilters(dimensionList);
+    removeFilters(dimensionList, chartList);
 
     geolayers.push(new L.geoJson([], {
         style: style,
@@ -109,15 +113,17 @@ $('#add-scenario').bind('click', function () {
         "testData": 0,
         "jobs": 0
     }]);
-    
+
     dc.redrawAll();
 });
 
 $('#mapid').on('click', '.edit', function () {
     var newLanduse = prompt("Enter a new land use");
-    //console.log(Object.keys(recipes));
+
     if (Object.keys(recipes).indexOf(newLanduse)>=0) {
-        removeFilters(dimensionList);
+        // remove all current filters on dimensions and charts
+        removeFilters(dimensionList, chartList);
+
         // update legend entries
         landuses[currentLayer][geolayers[currentLayer]._layers[lastClickedFeature].feature.properties.landuse]--;
         if (landuses[currentLayer][geolayers[currentLayer]._layers[lastClickedFeature].feature.properties.landuse] === 0) {
