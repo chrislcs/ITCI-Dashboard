@@ -14,6 +14,7 @@ var landuseDim = cf.dimension(function (d) { return d.landuse; });
 var scenarioDim = cf.dimension(function (d) { return d.scenario; });
 var yearDim = cf.dimension(function (d) { return d.year; });
 //var cropDim = cf.dimension(function (d) { return d.crop; });
+var dimensionList = [FIDDim, landuseDim, scenarioDim, yearDim];
 
 // crossfilter groups
 var areaSum = landuseDim.group().reduceSum(function (d) { return d.area; });
@@ -62,3 +63,10 @@ var jobsByYearStack = yearDim.group().reduce(
         return {};
     }
 );
+
+
+function removeFilters(dimensions) {
+    dimensions.forEach(function (dim) {
+        dim.filter(null)
+    });
+}

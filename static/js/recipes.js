@@ -229,7 +229,7 @@ function reloadData() {
         ndx.remove();
     }
 
-    removeData(cf, [FIDDim, landuseDim, scenarioDim, yearDim]);
+    removeData(cf, dimensionList);
     cf.add(data);
     dc.redrawAll();
 }

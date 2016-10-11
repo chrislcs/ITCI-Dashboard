@@ -49,13 +49,12 @@ map.on('draw:created', function (e) {
     biomassChart.x(d3.scale.linear().range([0, (biomassChart.width() - 50)]).domain([0, biomassSum.top(1)[0].value]));
     jobsChart.x(d3.scale.linear().range([0, (jobsChart.width() - 50)]).domain([0, jobsSum.top(1)[0].value]));
 
-    //createBarChart(biomassPerRecipeChart, yearDim, biomassByRecipeStack, true, maxBiomass, minYear, maxYear);
-
     biomassPerRecipeChart.group();
     dc.redrawAll();
 });
 
 map.on('draw:deleted', function (e) {
+    removeFilters(dimensionList);
     for (var layer in e.layers._layers) {
         if (e.layers._layers.hasOwnProperty(layer)) {
             // delete the data of deleted layers from the crossfilter
@@ -75,15 +74,20 @@ map.on('draw:deleted', function (e) {
 });
 
 $('#add-scenario').bind('click', function () {
+    removeFilters(dimensionList);
+
     geolayers.push(new L.geoJson([], {
         style: style,
         onEachFeature: onEachFeature
     }));
+
     previousLayer = currentLayer;
     currentLayer = geolayers.length - 1;
     map.removeLayer(geolayers[previousLayer]);
     landuses.push({});
+
     legend = updateLegend(legend, Object.keys(landuses[currentLayer]));
+
     var filterOnce;
     syncGroup.forEach(function (chart) {
         if (!filterOnce) {
@@ -94,6 +98,7 @@ $('#add-scenario').bind('click', function () {
         }
         chart.filters().fill(currentLayer + 1);
     });
+
     cf.add([{
         "FID": 999,
         "year": minYear,
@@ -104,6 +109,7 @@ $('#add-scenario').bind('click', function () {
         "testData": 0,
         "jobs": 0
     }]);
+    
     dc.redrawAll();
 });
 
@@ -111,6 +117,7 @@ $('#mapid').on('click', '.edit', function () {
     var newLanduse = prompt("Enter a new land use");
     //console.log(Object.keys(recipes));
     if (Object.keys(recipes).indexOf(newLanduse)>=0) {
+        removeFilters(dimensionList);
         // update legend entries
         landuses[currentLayer][geolayers[currentLayer]._layers[lastClickedFeature].feature.properties.landuse]--;
         if (landuses[currentLayer][geolayers[currentLayer]._layers[lastClickedFeature].feature.properties.landuse] === 0) {
@@ -155,6 +162,7 @@ $('#mapid').on('click', '.edit', function () {
 
         FIDDim.filterAll();
         dc.redrawAll();
+    } else if (newLanduse !== null) {
+        alert('Recipe not found, check recipes tab for names')
     }
-    else{alert('Recipe not found, check recipes tab for names')}
 });
