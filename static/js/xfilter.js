@@ -13,7 +13,7 @@ var FIDDim = cf.dimension(function (d) { return d.FID; });
 var landuseDim = cf.dimension(function (d) { return d.landuse; });
 var scenarioDim = cf.dimension(function (d) { return d.scenario; });
 var yearDim = cf.dimension(function (d) { return d.year; });
-var cropDim = cf.dimension(function (d) { return d.crop; });
+//var cropDim = cf.dimension(function (d) { return d.crop; });
 
 // crossfilter groups
 var areaSum = landuseDim.group().reduceSum(function (d) { return d.area; });

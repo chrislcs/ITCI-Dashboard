@@ -14,7 +14,7 @@ $(function() {
         stop: function(event, ui) {
             biomassPrice = ui.value;
             profitByYear = yearDim.group().reduceSum(function (d) { return d.biomass * biomassPrice - d.area * oilPrice * 0.01; });
-            createLineChart(profitChart, yearDim, profitByYear, false, minYear, maxYear);
+            createLineChart(profitChart, yearDim, profitByYear, minYear, maxYear);
             dc.redrawAll();
         }
     });
@@ -33,7 +33,7 @@ $(function() {
         stop: function(event, ui) {
             oilPrice = ui.value;
             profitByYear = yearDim.group().reduceSum(function (d) { return d.biomass * biomassPrice - d.area * oilPrice * 0.01; });
-            createLineChart(profitChart, yearDim, profitByYear, false, minYear, maxYear);
+            createLineChart(profitChart, yearDim, profitByYear, minYear, maxYear);
             dc.redrawAll();
         }
     });

@@ -19,8 +19,6 @@ var biomassPerCropChart = dc.barChart("#biomass-crop-chart");
 createPieChart(areaChart, landuseDim, areaSum);
 createLinkedRowChart(biomassChart, scenarioDim, biomassSum, syncGroup, "#33a02c");
 createLinkedRowChart(jobsChart, scenarioDim, jobsSum, syncGroup, "#1f78b4");
-console.log(landuses[currentLayer]);
-console.log(Object.keys(landuses[currentLayer])[0]);
 createBarChart(biomassPerRecipeChart, yearDim, biomassByRecipeStack, minYear, maxYear, Object.keys(landuses[currentLayer]), Object.keys(landuses[currentLayer])[0]);
 createLineChart(profitChart, yearDim, profitByYear, minYear, maxYear);
 createBarChart(biomassPerCropChart, yearDim, biomassByCropStack, minYear, maxYear, crops, crops[0]);
