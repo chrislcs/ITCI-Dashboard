@@ -20,7 +20,7 @@ createPieChart(areaChart, landuseDim, areaSum);
 createLinkedRowChart(biomassChart, scenarioDim, biomassSum, syncGroup, "#33a02c");
 createLinkedRowChart(jobsChart, scenarioDim, jobsSum, syncGroup, "#1f78b4");
 createBarChart(biomassPerRecipeChart, yearDim, biomassByRecipeStack, minYear, maxYear, Object.keys(landuses[currentLayer]), Object.keys(landuses[currentLayer])[0]);
-createLineChart(profitChart, yearDim, profitByYear, minYear, maxYear);
+createLineChart(profitChart, yearDim, incomeByYear, minYear, maxYear);
 createBarChart(biomassPerCropChart, yearDim, biomassByCropStack, minYear, maxYear, crops, crops[0]);
 
 // Add interactivity to the charts

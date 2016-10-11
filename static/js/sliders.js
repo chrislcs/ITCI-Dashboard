@@ -6,14 +6,14 @@ $(function() {
     $("#cassava-slider").slider({
         range: "max",
         min: 0,
-        max: 100,
-        value: 50,
+        max: 1000,
+        value: cassavaPrice,
         slide: function(event, ui) {
             $( "#cassava-price" ).val( ui.value );
         },
         stop: function(event, ui) {
             cassavaPrice = ui.value;
-            profitByYear = yearDim.group().reduceSum(function (d) {
+            incomeByYear = yearDim.group().reduceSum(function (d) {
                 if (d.crop === "Cassava") {
                     return d.biomass * cassavaPrice;
                 } else if (d.crop === "SugarPalm") {
@@ -22,7 +22,7 @@ $(function() {
                     return d.biomass * palmoilPrice;
                 }
             });
-            createLineChart(profitChart, yearDim, profitByYear, minYear, maxYear);
+            createLineChart(profitChart, yearDim, incomeByYear, minYear, maxYear);
             dc.redrawAll();
         }
     });
@@ -33,14 +33,14 @@ $(function() {
     $("#palmoil-slider").slider({
         range: "max",
         min: 0,
-        max: 100,
-        value: 50,
+        max: 1000,
+        value: palmoilPrice,
         slide: function(event, ui) {
             $( "#palmoil-price" ).val( ui.value );
         },
         stop: function(event, ui) {
             palmoilPrice = ui.value;
-            profitByYear = yearDim.group().reduceSum(function (d) {
+            incomeByYear = yearDim.group().reduceSum(function (d) {
                 if (d.crop === "Cassava") {
                     return d.biomass * cassavaPrice;
                 } else if (d.crop === "SugarPalm") {
@@ -49,7 +49,7 @@ $(function() {
                     return d.biomass * palmoilPrice;
                 }
             });
-            createLineChart(profitChart, yearDim, profitByYear, minYear, maxYear);
+            createLineChart(profitChart, yearDim, incomeByYear, minYear, maxYear);
             dc.redrawAll();
         }
     });
@@ -60,14 +60,14 @@ $(function() {
     $("#palmsugar-slider").slider({
         range: "max",
         min: 0,
-        max: 100,
-        value: 50,
+        max: 1000,
+        value: palmsugarPrice,
         slide: function(event, ui) {
             $( "#palmsugar-price" ).val( ui.value );
         },
         stop: function(event, ui) {
             palmsugarPrice = ui.value;
-            profitByYear = yearDim.group().reduceSum(function (d) {
+            incomeByYear = yearDim.group().reduceSum(function (d) {
                 if (d.crop === "Cassava") {
                     return d.biomass * cassavaPrice;
                 } else if (d.crop === "SugarPalm") {
@@ -76,7 +76,7 @@ $(function() {
                     return d.biomass * palmoilPrice;
                 }
             });
-            createLineChart(profitChart, yearDim, profitByYear, minYear, maxYear);
+            createLineChart(profitChart, yearDim, incomeByYear, minYear, maxYear);
             dc.redrawAll();
         }
     });
@@ -94,8 +94,8 @@ $(function() {
 //        },
 //        stop: function(event, ui) {
 //            oilPrice = ui.value;
-//            profitByYear = yearDim.group().reduceSum(function (d) { return d.biomass * biomassPrice - d.area * oilPrice * 0.01; });
-//            createLineChart(profitChart, yearDim, profitByYear, minYear, maxYear);
+//            incomeByYear = yearDim.group().reduceSum(function (d) { return d.biomass * biomassPrice - d.area * oilPrice * 0.01; });
+//            createLineChart(profitChart, yearDim, incomeByYear, minYear, maxYear);
 //            dc.redrawAll();
 //        }
 //    });

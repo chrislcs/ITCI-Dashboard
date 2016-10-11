@@ -85,7 +85,7 @@ function createLineChart(chart, dimension, group, minX, maxX, stack, stackOn) {
         //.y(d3.scale.linear().range([0, (chart.height() - 50)]).domain([minY, maxY]))
         .elasticY(true)
         //.interpolate('step-before')
-        .renderArea(true)
+        .renderArea(false)
         .brushOn(false)
         .renderDataPoints(false)
         .clipPadding(10)
