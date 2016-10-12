@@ -84,5 +84,5 @@ var drawControl;
 var cassavaPrice = 350;
 var palmoilPrice = 580;
 var palmsugarPrice = 668;
-//var oilPrice = 50;
+var petrolPrice = 1000;
 var crops = ["Cassava", "SugarPalm", "OilPalm"];
