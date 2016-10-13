@@ -40,16 +40,16 @@ function createPieChart(chart, dimension, group) {
         });
 }
 
-function createLinearBarChart(chart, dimension, group, minX, maxX, stack, stackOn) {
+function createLinearBarChart(chart, dimension, group, minX, maxX, xlabel, ylabel, stack, stackOn) {
     chart
         .x(d3.scale.linear().domain([minX, maxX]))
         //.y(d3.scale.linear().domain([0, maxY])) //.range([0, (chart.height() - 50)])
         .elasticY(true)
         .brushOn(false)
-        //.yAxisLabel("This is the Y Axis!")
+        .yAxisLabel(ylabel)
         .dimension(dimension)
         .group(group)
-        //.xAxisLabel("Year")
+        .xAxisLabel(xlabel)
         .yAxis().tickFormat(d3.format("s"));
 
     if (stack !== false) {
@@ -97,7 +97,7 @@ function createOrdinalBarChart(chart, dimension, group) {
     });
 }
 
-function createLineChart(chart, dimension, group, minX, maxX, stack, stackOn) {
+function createLineChart(chart, dimension, group, minX, maxX,xlabel,ylabel, stack, stackOn) {
     chart
         .x(d3.scale.linear().domain([minX, maxX]))
         //.y(d3.scale.linear().range([0, (chart.height() - 50)]).domain([minY, maxY]))
@@ -107,7 +107,8 @@ function createLineChart(chart, dimension, group, minX, maxX, stack, stackOn) {
         .brushOn(false)
         .renderDataPoints(false)
         .clipPadding(10)
-        //.yAxisLabel("This is the Y Axis!")
+        .yAxisLabel(ylabel)
+        .xAxisLabel(xlabel)
         .dimension(dimension)
         .group(group)
         .yAxis().tickFormat(d3.format("s"));
