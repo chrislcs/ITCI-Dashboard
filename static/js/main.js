@@ -70,7 +70,7 @@ var recipes = {
     "Recipe 3":[{"crop":"Cassava", "startYear":5, "endYear":15, "efficiency":100}]
 };
 var outline = loadShape('../static/data/ITCI_Boundary.geojson');
-var shapes = [loadShape('../static/data/Scenario1.geojson')];
+var shapes = [loadShape('../static/data/Scenario2.geojson')];
 var FID = 0;
 var data = [];
 var colorScale = d3.scale.category10();
