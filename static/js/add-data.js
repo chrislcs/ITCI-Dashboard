@@ -127,11 +127,11 @@ function onEachFeature(feature, layer) {
 function style(feature) {
     return {
         fillColor: colorScale(feature.properties.landuse),
-        weight: 2,
-        opacity: 1,
-        color: 'white',
+        weight: 1,
+        opacity:0.5,
+        color: 'black',
         dashArray: '3',
-        fillOpacity: 0.7
+        fillOpacity: 0.2
     }
 }
 
