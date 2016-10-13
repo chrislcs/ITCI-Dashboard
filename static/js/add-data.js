@@ -19,7 +19,7 @@ function countItems(feature, key) {
 }
 
 function loadRecipeDataFromDatabase(feature) {
-    var currentRecipe = recipes[feature["properties"]["landuse"]];
+    var currentRecipe = recipes[feature["properties"]["landuse"]]['crops'];
     var returnData = {};
     if(typeof currentRecipe != 'undefined') {
 
@@ -58,63 +58,89 @@ function loadDistanceDataFromDatabase(feature) {
     return returnData;
 }
 
-function retrieveData(feature, array, scenario) {
-    function addData(feature) {
-        var area = turf.area(feature);
-        feature["properties"]["area"] = area;
-        feature["properties"]["FID"] = FID;
-        var recipeData = loadRecipeDataFromDatabase(feature);
-        var distData = loadDistanceDataFromDatabase(feature);
-        for (var y = 1; y < 21; y++) {
-            for (var crop in recipeData) {
-                if (recipeData.hasOwnProperty(crop)) {
-                    var currentRecipe = recipes[feature["properties"]["landuse"]];
-                    for (var i= 0; i<currentRecipe.length; i++) {
-                        if (currentRecipe[i]['crop'] === crop) {
-                            var efficiency = currentRecipe[i]['efficiency'] / 100.0;
-                            var startYear = currentRecipe[i]['startyear'];
-                            var endYear = currentRecipe[i]['endyear'];
-                        }
-                    }
-
-                    if (y >= startYear && y <= endYear) {
-                        array.push({
-                            "FID": FID,
-                            "year": y,
-                            "scenario": scenario,
-                            "landuse": feature["properties"]["landuse"],
-                            "area": area,
-                            "crop": crop,
-                            "biomass": recipeData[crop][y-startYear+1]["sum"] * efficiency,
-                            "distance_mean": distData['distance_mean'][1]["mean"],
-                            "jobs": (Math.random() * area) / (100000 * 20)
-                        });
-                    } else {
-                        array.push({
-                            "FID": FID,
-                            "year": y,
-                            "scenario": scenario,
-                            "landuse": feature["properties"]["landuse"],
-                            "area": area,
-                            "crop": crop,
-                            "biomass": 0,
-                            "distance_mean": 0,
-                            "jobs": 0
-                        });
+function addDataToXfilter(shape, shapeLanduse, FID, scenario, area) {
+    var recipeData = loadRecipeDataFromDatabase(shape);
+    var distData = loadDistanceDataFromDatabase(shape);
+    for (var y = 1; y < 21; y++) {
+        for (var crop in recipeData) {
+            if (recipeData.hasOwnProperty(crop)) {
+                var currentRecipe = recipes[shapeLanduse];
+                for (var i = 0; i < currentRecipe['crops'].length; i++) {
+                    if (currentRecipe['crops'][i]['crop'] === crop) {
+                        var efficiency = currentRecipe['crops'][i]['efficiency'] / 100.0;
+                        var startYear = currentRecipe['crops'][i]['startyear'];
+                        var endYear = currentRecipe['crops'][i]['endyear'];
+                        var areaFraction = currentRecipe['crops'][i]['area'] / 100.0;
                     }
                 }
+
+                if (y >= startYear && y <= endYear) {
+                    cf.add([{
+                        "FID": FID,
+                        "year": y,
+                        "scenario": scenario,
+                        "landuse": shapeLanduse,
+                        "area": area,
+                        "crop": crop,
+                        "biomass": recipeData[crop][y - startYear + 1]["sum"] * efficiency * areaFraction,
+                        "distance_mean": distData['distance_mean'][1]["mean"],
+                        "jobs": currentRecipe['labor']
+                    }]);
+                } else {
+                    cf.add([{
+                        "FID": FID,
+                        "year": y,
+                        "scenario": scenario,
+                        "landuse": shapeLanduse,
+                        "area": area,
+                        "crop": crop,
+                        "biomass": 0,
+                        "distance_mean": 0,
+                        "jobs": 0
+                    }]);
+                }
+
             }
         }
     }
+}
+
+function retrieveData(feature, scenario) {
+    function addData(feature, scenario) {
+        var area = turf.area(feature);
+        feature["properties"]["area"] = area;
+        feature["properties"]["FID"] = FID;
+        addDataToXfilter(feature, feature["properties"]["landuse"], FID, scenario, area);
+    }
     if (feature.type === 'FeatureCollection') {
         for (var i = 0; i < feature.features.length; i++) {
-            addData(feature.features[i]);
+            addData(feature.features[i], scenario);
             FID++;
         }
     } else {
-        addData(feature);
+        addData(feature, scenario);
         FID++;
     }
+}
+
+function reloadData() {
+    function removeData(ndx, dimensions) {
+        dimensions.forEach(function (dim) {
+            dim.filter(null)
+        });
+        ndx.remove();
+    }
+
+    removeData(cf, dimensionList);
+
+    // Add data to  crossfilter
+    for (var i=0; i<geolayers.length; i++){
+        Object.keys(geolayers[i]._layers).forEach(function (key, index) {
+            retrieveData(geolayers[i]._layers[key]['feature'], i+1);
+        });
+    }
+
+    dc.redrawAll();
 }
 
 function onEachFeature(feature, layer) {
@@ -141,7 +167,7 @@ if (typeof shapes[currentLayer] !== 'undefined') {
         landuses.push(countItems(shapes[i], "landuse", landuses[i]));
 
         // each initial polygon
-        retrieveData(shapes[i], data, i + 1);
+        retrieveData(shapes[i], i + 1);
 
         // draw the initial polygons
         geolayers.push(new L.geoJson(shapes[i], {

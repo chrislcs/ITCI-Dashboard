@@ -8,11 +8,15 @@ $(function() {
     });
 });
 
-function editRecipe(obj, param) {
+function editRecipeCrops(obj, param) {
     var recipeIndex = obj.id.match(/\d/g)[0];
     var cropIndex = obj.id.match(/\d/g)[1]-1;
     var recipeName = document.getElementById("Recipe-" + recipeIndex + "-Name").value;
-    recipes[recipeName][cropIndex][param] = obj.value;
+    if (param !== 'crop') {
+        recipes[recipeName]['crops'][cropIndex][param] = parseInt(obj.value);
+    } else {
+        recipes[recipeName]['crops'][cropIndex][param] = obj.value;
+    }
 }
 
 function changeName(obj) {
@@ -28,12 +32,18 @@ function changeName(obj) {
     recipeNames[recipeIndex-1] = newName
 }
 
+function editRecipeParam(obj, param) {
+    var recipeIndex = obj.id.match(/\d/g)[0];
+    var recipeName = document.getElementById("Recipe-" + recipeIndex + "-Name").value;
+    recipes[recipeName][param] = parseInt(obj.value);
+}
+
 var recipeCount = 0;
 
-function setRecipe(tableID, crops, initial) {
-    for (var i = 0; i < crops.length; i++) {
+function setRecipe(tableID, recipe, initial) {
+    for (var i = 0; i < recipe['crops'].length; i++) {
 
-        var val = crops[i].crop;
+        var val = recipe['crops'][i].crop;
         var sel = document.getElementById(tableID + "-Select-" + (i+1));
         if (!sel) {
             addCrop(tableID, initial);
@@ -48,54 +58,68 @@ function setRecipe(tableID, crops, initial) {
             }
         }
 
-        document.getElementById(tableID + "-StartYear-" + (i+1)).value = crops[i]['startyear'];
-        document.getElementById(tableID + "-EndYear-" + (i+1)).value = crops[i]['endyear'];
-        document.getElementById(tableID + "-Efficiency-" + (i+1)).value = crops[i]['efficiency'];
+        document.getElementById(tableID + "-StartYear-" + (i+1)).value = recipe['crops'][i]['startyear'];
+        document.getElementById(tableID + "-EndYear-" + (i+1)).value = recipe['crops'][i]['endyear'];
+        document.getElementById(tableID + "-Area-" + (i+1)).value = recipe['crops'][i]['area'];
+        document.getElementById(tableID + "-Efficiency-" + (i+1)).value = recipe['crops'][i]['efficiency'];
     }
+    document.getElementById(tableID + "-LaborReq").value = recipe['labor'];
 }
 
 function addRecipe(initial) {
     recipeCount += 1;
     var newRecipe = '<h3><input type="text" class="recipe-name" id="Recipe-' + recipeCount + '-Name" value="Recipe ' + recipeCount + '"/></h3>' +
-        '<div><TABLE id="Recipe-' + recipeCount + '" width="350px" border="1">' +
-        '<tr><th>Crop</th><th>Start Year</th><th>End Year</th><th>Efficiency</th><th>Remove</th></tr>' +
+        '<div><div><TABLE id="Recipe-' + recipeCount + '" width="350px" border="1">' +
+        '<tr><th>Crop</th><th>Start Year</th><th>End Year</th><th>Area</th><th>Efficiency</th><th>Remove</th></tr>' +
         '<TR><TD><SELECT id="Recipe-' + recipeCount + '-Select-1" class="crop-select"><OPTION value="Cassava">Cassava</OPTION>' +
         '<OPTION value="SugarPalm">SugarPalm</OPTION>' +
         '<OPTION value="OilPalm">OilPalm</OPTION></SELECT></TD>' +
         '<TD><INPUT id="Recipe-' + recipeCount + '-StartYear-1" class="start-year" type="number" value="1"/></TD>' +
         '<TD><INPUT id="Recipe-' + recipeCount + '-EndYear-1" class="end-year" type="number" value="20"/></TD>' +
+        '<TD><INPUT id="Recipe-' + recipeCount + '-Area-1" class="area" type="number" value="100"/></TD>' +
         '<TD><INPUT id="Recipe-' + recipeCount + '-Efficiency-1" class="efficiency" type="number" value="100"/></TD>' +
         '<td><INPUT class="remove-button" id="Recipe-' + recipeCount + '-Remove-1" type="button" value="-"' +
-        'onclick="removeCrop(\'Recipe-' + recipeCount + '\',this.id)"/></td></TR></TABLE>' +
-        '<INPUT type="button" value="Add Crop" onclick="addCrop(\'Recipe-' + recipeCount + '\')"/>' +
+        'onclick="removeCrop(\'Recipe-' + recipeCount + '\',this.id)"/></td></TR></TABLE></div>' +
+        //'Biodiversity index: <input type="number" class="biodiversity" id ="Recipe-' + recipeCount + '-Biodiversity" value="1"/>' +
+        '<div><INPUT type="button" value="+" onclick="addCrop(\'Recipe-' + recipeCount + '\')"/></div>' +
+        '<div>Labor force required (people per hectare): <input type="number" class="labor-req" id ="Recipe-' + recipeCount + '-LaborReq" value="1"/></div>' +
         '<INPUT type="button" value="Remove Recipe" class="removeRecipe"/></div>';
     $('.recipes').append(newRecipe);
     $('.recipes').accordion("refresh");
 
     if (initial !== true) {
-        recipes["Recipe " + recipeCount] = [{
+        recipes["Recipe " + recipeCount] = {"crops": [], "labor": 50};
+        recipes["Recipe " + recipeCount]['crops'].push(
+            [{
             crop: 'Cassava',
             startyear: 1,
             endyear: 20,
+            area: 100,
             efficiency: 100
-        }];
+        }]);
         recipeNames.push("Recipe " + recipeCount);
 
         $(document).ready( function() {
             $('.crop-select').on('change', function() {
-                editRecipe(this, 'crop');
+                editRecipeCrops(this, 'crop');
             });
             $('.start-year').on('change', function() {
-                editRecipe(this, 'startyear');
+                editRecipeCrops(this, 'startyear');
             });
             $('.end-year').on('change', function() {
-                editRecipe(this, 'endyear');
+                editRecipeCrops(this, 'endyear');
+            });
+            $('.area').on('change', function() {
+                editRecipeCrops(this, 'area');
             });
             $('.efficiency').on('change', function() {
-                editRecipe(this, 'efficiency');
+                editRecipeCrops(this, 'efficiency');
             });
             $('.recipe-name').on('change keyup paste', function() {
                 changeName(this)
+            })
+            $('.labor-req').on('change', function() {
+                editRecipeParam(this, 'labor')
             });
         });
     }
@@ -145,19 +169,25 @@ $(document).on('click', '.removeRecipe' , function() {
 
     $(document).ready( function() {
         $('.crop-select').on('change', function() {
-            editRecipe(this, 'crop');
+            editRecipeCrops(this, 'crop');
         });
         $('.start-year').on('change', function() {
-            editRecipe(this, 'startyear');
+            editRecipeCrops(this, 'startyear');
         });
         $('.end-year').on('change', function() {
-            editRecipe(this, 'endyear');
+            editRecipeCrops(this, 'endyear');
+        });
+        $('.area').on('change', function() {
+            editRecipeCrops(this, 'area');
         });
         $('.efficiency').on('change', function() {
-            editRecipe(this, 'efficiency');
+            editRecipeCrops(this, 'efficiency');
         });
         $('.recipe-name').on('change keyup paste', function() {
             changeName(this)
+        });
+        $('.labor-req').on('change', function() {
+            editRecipeParam(this, 'labor')
         });
     });
 
@@ -193,6 +223,10 @@ function addCrop(tableID, initial) {
                 newcell.childNodes[0].value = "20";
                 newcell.childNodes[0].id = "Recipe-" + tableNumber + "-EndYear-" + rowCount;
                 break;
+            case "area":
+                newcell.childNodes[0].value = "100";
+                newcell.childNodes[0].id = "Recipe-" + tableNumber + "-Area-" + rowCount;
+                break;
             case "efficiency":
                 newcell.childNodes[0].value = "100";
                 newcell.childNodes[0].id = "Recipe-" + tableNumber + "-Efficiency-" + rowCount;
@@ -207,28 +241,35 @@ function addCrop(tableID, initial) {
     // Add to recipes variable
     if (initial !== true) {
         var recipeName = document.getElementById("Recipe-" + tableNumber + "-Name").value;
-        recipes[recipeName].push({
+        recipes[recipeName]['crops'].push({
             crop: 'Cassava',
             startyear: 1,
             endyear: 20,
+            area: 100,
             efficiency: 100
         });
 
         $(document).ready( function() {
             $('.crop-select').on('change', function() {
-                editRecipe(this, 'crop');
+                editRecipeCrops(this, 'crop');
             });
             $('.start-year').on('change', function() {
-                editRecipe(this, 'startyear');
+                editRecipeCrops(this, 'startyear');
             });
             $('.end-year').on('change', function() {
-                editRecipe(this, 'endyear');
+                editRecipeCrops(this, 'endyear');
+            });
+            $('.area').on('change', function() {
+                editRecipeCrops(this, 'area');
             });
             $('.efficiency').on('change', function() {
-                editRecipe(this, 'efficiency');
+                editRecipeCrops(this, 'efficiency');
             });
             $('.recipe-name').on('change keyup paste', function() {
                 changeName(this)
+            });
+            $('.labor-req').on('change', function() {
+                editRecipeParam(this, 'labor')
             });
         });
     }
@@ -269,7 +310,7 @@ function removeCrop(tableID, rowID) {
         table.rows[i].cells[3].innerHTML = table.rows[i].cells[3].innerHTML.replace(pattern, string);
 
         // restore correct values
-        var val = recipes[recipeName][i-1]['crop'];
+        var val = recipes[recipeName]['crops'][i-1]['crop'];
         var sel = document.getElementById("Recipe-" + tableNumber + "-Select-" + i);
         var opts = sel.options;
         for (var opt, j = 0; opt = opts[j]; j++) {
@@ -278,26 +319,33 @@ function removeCrop(tableID, rowID) {
                 break;
             }
         }
-        document.getElementById("Recipe-" + tableNumber + "-StartYear-" + i).value = recipes[recipeName][i-1]['startyear'];
-        document.getElementById("Recipe-" + tableNumber + "-EndYear-" + i).value = recipes[recipeName][i-1]['endyear'];
-        document.getElementById("Recipe-" + tableNumber + "-Efficiency-" + i).value = recipes[recipeName][i-1]['efficiency'];
+        document.getElementById("Recipe-" + tableNumber + "-StartYear-" + i).value = recipes[recipeName]['crops'][i-1]['startyear'];
+        document.getElementById("Recipe-" + tableNumber + "-EndYear-" + i).value = recipes[recipeName]['crops'][i-1]['endyear'];
+        document.getElementById("Recipe-" + tableNumber + "-Area-" + i).value = recipes[recipeName]['crops'][i-1]['area'];
+        document.getElementById("Recipe-" + tableNumber + "-Efficiency-" + i).value = recipes[recipeName]['crops'][i-1]['efficiency'];
     }
 
     $(document).ready( function() {
         $('.crop-select').on('change', function() {
-            editRecipe(this, 'crop');
+            editRecipeCrops(this, 'crop');
         });
         $('.start-year').on('change', function() {
-            editRecipe(this, 'startyear');
+            editRecipeCrops(this, 'startyear');
         });
         $('.end-year').on('change', function() {
-            editRecipe(this, 'endyear');
+            editRecipeCrops(this, 'endyear');
+        });
+        $('.area').on('change', function() {
+            editRecipeCrops(this, 'area');
         });
         $('.efficiency').on('change', function() {
-            editRecipe(this, 'efficiency');
+            editRecipeCrops(this, 'efficiency');
         });
         $('.recipe-name').on('change keyup paste', function() {
             changeName(this)
+        });
+        $('.labor-req').on('change', function() {
+            editRecipeParam(this, 'labor')
         });
     });
 }
@@ -311,39 +359,24 @@ $(document).ready( function() {
 
 $(document).ready( function() {
     $('.crop-select').on('change', function() {
-        editRecipe(this, 'crop');
+        editRecipeCrops(this, 'crop');
     });
     $('.start-year').on('change', function() {
-        editRecipe(this, 'startyear');
+        editRecipeCrops(this, 'startyear');
     });
     $('.end-year').on('change', function() {
-        editRecipe(this, 'endyear');
+        editRecipeCrops(this, 'endyear');
+    });
+    $('.area').on('change', function() {
+        editRecipeCrops(this, 'area');
     });
     $('.efficiency').on('change', function() {
-        editRecipe(this, 'efficiency');
+        editRecipeCrops(this, 'efficiency');
     });
     $('.recipe-name').on('change keyup paste', function() {
         changeName(this)
     });
+    $('.labor-req').on('change', function() {
+        editRecipeParam(this, 'labor')
+    });
 });
-
-
-function reloadData() {
-    data = [];
-    for (var i=0; i<geolayers.length; i++){
-        Object.keys(geolayers[i]._layers).forEach(function (key, index) {
-            retrieveData(geolayers[i]._layers[key]['feature'], data, i+1);
-        });
-    }
-
-    function removeData(ndx, dimensions) {
-        dimensions.forEach(function (dim) {
-            dim.filter(null)
-        });
-        ndx.remove();
-    }
-
-    removeData(cf, dimensionList);
-    cf.add(data);
-    dc.redrawAll();
-}

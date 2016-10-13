@@ -65,15 +65,18 @@ function loadShape(url) {
 }
 
 var recipes = {
-    "Recipe 1":[{"crop":"Cassava", "startyear":1, "endyear":9, "efficiency":80}, {"crop":"SugarPalm", "startyear":1, "endyear":20, "efficiency":100}],
-    "Recipe 2":[{"crop":"OilPalm", "startyear":1, "endyear":20, "efficiency":100}],
-    "Recipe 3":[{"crop":"Cassava", "startyear":5, "endyear":15, "efficiency":100}]
+    "Recipe 1":{"crops": [{"crop":"Cassava", "startyear":1, "endyear":9, "area": 50, "efficiency":80},
+                          {"crop":"SugarPalm", "startyear":1, "endyear":20, "area": 50, "efficiency":100}],
+                "labor": 50},
+    "Recipe 2":{"crops": [{"crop":"OilPalm", "startyear":1, "endyear":20, "area": 100, "efficiency":100}],
+                "labor": 50},
+    "Recipe 3":{"crops": [{"crop":"Cassava", "startyear":5, "endyear":15, "area": 100, "efficiency":100}],
+                "labor": 50}
 };
 var recipeNames = Object.keys(recipes);
 var outline = loadShape('../static/data/ITCI_Boundary.geojson');
 var shapes = [loadShape('../static/data/Scenario2.geojson')];
 var FID = 0;
-var data = [];
 var colorScale = d3.scale.category10();
 var lastClickedFeature;
 var geolayers = [];
@@ -87,3 +90,6 @@ var palmoilPrice = 580;
 var palmsugarPrice = 668;
 var petrolPrice = 1000;
 var crops = ["Cassava", "SugarPalm", "OilPalm"];
+
+// create crossfilter
+var cf = crossfilter();

@@ -302,3 +302,31 @@ ul.tabs li.current{
                 50% 50%
                 no-repeat;
 }
+
+table{
+    border: 1px solid black;
+    table-layout: fixed;
+    width: 800px;
+}
+
+th, td {
+    border: 1px solid black;
+    overflow: hidden;
+    width: 100px;
+}
+
+.start-year {
+    width: 120px;
+}
+
+.end-year {
+    width: 120px;
+}
+
+.area {
+    width: 120px;
+}
+
+.efficiency {
+    width: 120px;
+}
