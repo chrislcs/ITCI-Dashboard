@@ -2,11 +2,10 @@
  * Created by Chris on 06/10/2016.
  */
 
-// create crossfilter
-var cf = crossfilter();
+
 
 // add data to crossfilter
-cf.add(data);
+//cf.add(data);
 
 // crossfilter dimensions
 var FIDDim = cf.dimension(function (d) { return d.FID; });

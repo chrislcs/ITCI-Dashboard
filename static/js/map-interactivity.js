@@ -26,24 +26,9 @@ map.on('draw:created', function (e) {
     legend = updateLegend(legend, Object.keys(landuses[currentLayer]));
     //updateDrawControl(geolayers[currentLayer]);
 
-    // update graph
-    var recipeData = loadRecipeDataFromDatabase(shape);
-    for (var y = 1; y < 21; y++) {
-        for (var crop in recipeData) {
-            if (recipeData.hasOwnProperty(crop)) {
-                cf.add([{
-                    "FID": FID,
-                    "year": y,
-                    "scenario": currentLayer + 1,
-                    "landuse": shapeLanduse,
-                    "area": area,
-                    "crop": crop,
-                    "biomass": recipeData[crop][y]["sum"],
-                    "jobs": (Math.random() * area) / (100000 * 20)
-                }]);
-            }
-        }
-    }
+    // update crossfilter
+    addDataToXfilter(shape, shapeLanduse, FID, currentLayer + 1,  area);
+
     FID++;
 
     biomassChart.x(d3.scale.linear().range([0, (biomassChart.width() - 50)]).domain([0, biomassSum.top(1)[0].value]));
@@ -148,23 +133,7 @@ $('#mapid').on('click', '.edit', function () {
         var scenario = FIDDim.top(1)[0].scenario;
         cf.remove();
 
-        var recipeData = loadRecipeDataFromDatabase(geolayers[currentLayer]._layers[lastClickedFeature].feature);
-        for (var y = 1; y < 21; y++) {
-            for (var crop in recipeData) {
-                if (recipeData.hasOwnProperty(crop)) {
-                    cf.add([{
-                        "FID": currentFID,
-                        "year": y,
-                        "scenario": scenario,
-                        "landuse": newLanduse,
-                        "area": area,
-                        "crop": crop,
-                        "biomass": recipeData[crop][y]["sum"],
-                        "jobs": (Math.random() * area) / (100000 * 20)
-                    }]);
-                }
-            }
-        }
+        addDataToXfilter(geolayers[currentLayer]._layers[lastClickedFeature].feature, newLanduse, currentFID, scenario, area);
 
         FIDDim.filterAll();
         dc.redrawAll();
