@@ -40,12 +40,15 @@ var overlayMaps = {
 
 L.control.layers(baseMaps, overlayMaps).addTo(map);
 
+var outlineStyle =
+{
+    "color": "#3f633f",
+    "weight": 2,
+    "opacity": 0.35
+};
+
 var outlineLayer = new L.geoJson(outline,{
-    style: {
-        "color": "#3f633f",
-        "weight": 2,
-        "opacity": 0.35
-    }
+    style: outlineStyle
 });
 map.addLayer(outlineLayer);
 
@@ -57,6 +60,16 @@ var outlineInsideLayer = new L.geoJson(outlineInside,{
     }
 });
 map.addLayer(outlineInsideLayer);
+
+map.on('zoomed', function () {
+    currentZoom = map.getZoom();
+    if (currentZoom > 11) {
+        outlineLayer.setStyle({weight: 2});
+    }
+    else {
+        outlineLayer.setStyle({weight: 4});
+    }
+});
 
 
 function updateLegend(legend, items) {
