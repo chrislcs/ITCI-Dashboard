@@ -86,7 +86,10 @@ function addDataToXfilter(shape, shapeLanduse, FID, scenario, area) {
                         "distance_mean": distData['distance_mean'][1]["mean"],
                         "jobs": currentRecipe['labor']
                     }]);
-                } else {
+
+                }
+
+                else {
                     cf.add([{
                         "FID": FID,
                         "year": y,

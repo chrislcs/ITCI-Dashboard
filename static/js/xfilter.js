@@ -40,11 +40,11 @@ var incomeByYear = yearDim.group().reduceSum(function (d) {
 
 var expenseByYear = yearDim.group().reduceSum(function (d) {
     if (d.crop === "Cassava") {
-        return ((d.biomass/20)* d.distance_mean*2*(1/8)*petrolPrice);
+        return (((d.biomass/20)* d.distance_mean*2*(1/8)*petrolPrice)+ d.jobs*5000);
     } else if (d.crop === "SugarPalm") {
-        return ((d.biomass/10)* d.distance_mean*2*(1/8)*petrolPrice);
+        return (((d.biomass/10)* d.distance_mean*2*(1/8)*petrolPrice)+d.jobs*5000);
     } else if (d.crop === "OilPalm") {
-        return  ((d.biomass/20)* d.distance_mean*2*(1/8)*petrolPrice);
+        return  (((d.biomass/20)* d.distance_mean*2*(1/8)*petrolPrice)+d.jobs*5000);
     }
 });
 
