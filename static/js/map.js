@@ -27,7 +27,7 @@ var DEM = new L.TileLayer.WMS('http://localhost:8080/geoserver/ITCI_Dashboard/wm
 var map = L.map('mapid', {
     crs: L.CRS.EPSG4326,
     layers: [aerial, terrain, DEM]
-}).setView([-0.85, 116.616], 11);
+}).setView([-0.86930, 116.62068], 13);
 
 var baseMaps = {
     "Aerial Photo": aerial,
@@ -40,8 +40,37 @@ var overlayMaps = {
 
 L.control.layers(baseMaps, overlayMaps).addTo(map);
 
-var outlineLayer = new L.geoJson(outline);
+var outlineStyle =
+{
+    "color": "#3f633f",
+    "weight": 2,
+    "opacity": 0.35
+};
+
+var outlineLayer = new L.geoJson(outline,{
+    style: outlineStyle
+});
 map.addLayer(outlineLayer);
+
+var outlineInsideLayer = new L.geoJson(outlineInside,{
+    style: {
+        "color": "#3ca156",
+        "weight": 0,
+        "opacity": 0.35
+    }
+});
+map.addLayer(outlineInsideLayer);
+
+map.on('zoomed', function () {
+    currentZoom = map.getZoom();
+    if (currentZoom > 11) {
+        outlineLayer.setStyle({weight: 2});
+    }
+    else {
+        outlineLayer.setStyle({weight: 4});
+    }
+});
+
 
 function updateLegend(legend, items) {
     if (legend instanceof L.Control) {

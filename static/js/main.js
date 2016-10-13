@@ -75,6 +75,7 @@ var recipes = {
 };
 var recipeNames = Object.keys(recipes);
 var outline = loadShape('../static/data/ITCI_Boundary.geojson');
+var outlineInside = loadShape('../static/data/ITCI_Boundary_inside.geojson');
 var shapes = [loadShape('../static/data/Scenario2.geojson')];
 var FID = 0;
 var colorScale = d3.scale.category10();
