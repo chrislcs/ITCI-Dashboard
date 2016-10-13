@@ -21,16 +21,16 @@ var chartList = [areaChart, biomassChart, jobsChart, biomassPerRecipeChart, prof
 createPieChart(areaChart, landuseDim, areaSum);
 createLinkedRowChart(biomassChart, scenarioDim, biomassSum, syncGroup, "#33a02c");
 createLinkedRowChart(jobsChart, scenarioDim, jobsSum, syncGroup, "#1f78b4");
-createBarChart(biomassPerRecipeChart, yearDim, biomassByRecipeStack, minYear, maxYear, Object.keys(landuses[currentLayer]), Object.keys(landuses[currentLayer])[0]);
-createLineChart(profitChart, yearDim, incomeByYear, minYear, maxYear);
-createBarChart(biomassPerCropChart, yearDim, biomassByCropStack, minYear, maxYear, crops, crops[0]);
+createBarChart(biomassPerRecipeChart, yearDim, biomassByRecipeStack, minYear, maxYear,'Year','Metric Tonnes', Object.keys(landuses[currentLayer]), Object.keys(landuses[currentLayer])[0]);
+createLineChart(profitChart, yearDim, incomeByYear, minYear, maxYear,'Year','\u20ac');
+createBarChart(biomassPerCropChart, yearDim, biomassByCropStack, minYear, maxYear,'Year','Metric Tonnes', crops, crops[0]);
 
 // Add interactivity to the charts
 biomassChart.on('renderlet', function (chart) {
     function redrawBarChart() {
         previousLayer = currentLayer;
         currentLayer = biomassChart.filters()[0] - 1;
-        createBarChart(biomassPerRecipeChart, yearDim, biomassByRecipeStack, minYear, maxYear, landuses[currentLayer], Object.keys(landuses[currentLayer])[0]);
+        createBarChart(biomassPerRecipeChart, yearDim, biomassByRecipeStack, minYear, maxYear,'Year','Metric Tonnes', landuses[currentLayer], Object.keys(landuses[currentLayer])[0]);
         document.getElementById("by-year-bar-chart-title").innerHTML = "Biomass by year";
         dc.redrawAll();
     }
@@ -50,8 +50,8 @@ jobsChart.on('renderlet', function (chart) {
     function redrawBarChart() {
         previousLayer = currentLayer;
         currentLayer = biomassChart.filters()[0] - 1;
-        createBarChart(biomassPerRecipeChart, yearDim, jobsByYearStack, minYear, maxYear, landuses[currentLayer], Object.keys(landuses[currentLayer])[0]);
-        document.getElementById("by-year-bar-chart-title").innerHTML = "Jobs by year";
+        createBarChart(biomassPerRecipeChart, yearDim, jobsByYearStack, minYear, maxYear,'Year','Metric Tonnes', landuses[currentLayer], Object.keys(landuses[currentLayer])[0]);
+        document.getElementById("by-year-bar-chart-title").innerHTML = "Annual Employment Rate";
         dc.redrawAll();
     }
 
