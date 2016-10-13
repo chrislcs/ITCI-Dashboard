@@ -34,7 +34,7 @@ map.on('draw:created', function (e) {
     biomassChart.x(d3.scale.linear().range([0, (biomassChart.width() - 50)]).domain([0, biomassSum.top(1)[0].value]));
     jobsChart.x(d3.scale.linear().range([0, (jobsChart.width() - 50)]).domain([0, jobsSum.top(1)[0].value]));
 
-    biomassPerRecipeChart.group();
+    indicatorPerRecipeChart.group();
     dc.redrawAll();
 });
 

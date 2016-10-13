@@ -12,18 +12,18 @@ var maxYear = yearDim.top(1)[0].year;
 var areaChart = dc.pieChart("#area-chart");
 var biomassChart = dc.linkedRowChart("#biomass-chart");
 var jobsChart = dc.linkedRowChart("#jobs-chart");
-var biomassPerRecipeChart = dc.barChart("#biomass-recipe-chart");
+var indicatorPerRecipeChart = dc.barChart("#biomass-recipe-chart");
 var profitChart = dc.lineChart("#profit-chart");
 var biomassPerCropChart = dc.barChart("#biomass-crop-chart");
 var incomePerCropChart = dc.barChart("#income-crop-chart");
 
-var chartList = [areaChart, biomassChart, jobsChart, biomassPerRecipeChart, profitChart, biomassPerCropChart];
+var chartList = [areaChart, biomassChart, jobsChart, indicatorPerRecipeChart, profitChart, biomassPerCropChart];
 
 createPieChart(areaChart, landuseDim, areaSum);
 createLinkedRowChart(biomassChart, scenarioDim, biomassSum, syncGroup, "#33a02c");
 createLinkedRowChart(jobsChart, scenarioDim, jobsSum, syncGroup, "#1f78b4");
 createLineChart(profitChart, yearDim, incomeByYear, minYear, maxYear,'Year','\u20ac');
-createLinearBarChart(biomassPerRecipeChart, yearDim, biomassByRecipeStack, minYear, maxYear, 'Year','Metric Tonnes', Object.keys(landuses[currentLayer]), Object.keys(landuses[currentLayer])[0]);
+createLinearBarChart(indicatorPerRecipeChart, yearDim, biomassByRecipeStack, minYear, maxYear, 'Year','Metric Tonnes', Object.keys(landuses[currentLayer]), Object.keys(landuses[currentLayer])[0]);
 createLinearBarChart(biomassPerCropChart, yearDim, biomassByCropStack, minYear, maxYear, 'Year','Metric Tonnes', crops, crops[0]);
 createOrdinalBarChart(incomePerCropChart, cropDim, incomeByCrop, minYear, maxYear, false);
 
@@ -32,7 +32,7 @@ biomassChart.on('renderlet', function (chart) {
     function redrawBarChart() {
         previousLayer = currentLayer;
         currentLayer = biomassChart.filters()[0] - 1;
-        createLinearBarChart(biomassPerRecipeChart, yearDim, biomassByRecipeStack, minYear, maxYear, 'Year', 'Metric Tonnes', landuses[currentLayer], Object.keys(landuses[currentLayer])[0]);
+        createLinearBarChart(indicatorPerRecipeChart, yearDim, biomassByRecipeStack, minYear, maxYear, 'Year', 'Metric Tonnes', landuses[currentLayer], Object.keys(landuses[currentLayer])[0]);
         document.getElementById("by-year-bar-chart-title").innerHTML = "Biomass by year";
         dc.redrawAll();
     }
@@ -52,7 +52,7 @@ jobsChart.on('renderlet', function (chart) {
     function redrawBarChart() {
         previousLayer = currentLayer;
         currentLayer = biomassChart.filters()[0] - 1;
-        createLinearBarChart(biomassPerRecipeChart, yearDim, jobsByYearStack, minYear, maxYear, 'Year', 'Metric Tonnes', landuses[currentLayer], Object.keys(landuses[currentLayer])[0]);
+        createLinearBarChart(indicatorPerRecipeChart, yearDim, jobsByYearStack, minYear, maxYear, 'Year', 'Metric Tonnes', landuses[currentLayer], Object.keys(landuses[currentLayer])[0]);
         document.getElementById("by-year-bar-chart-title").innerHTML = "Annual Employment Rate";
         dc.redrawAll();
     }
