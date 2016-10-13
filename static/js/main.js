@@ -65,10 +65,11 @@ function loadShape(url) {
 }
 
 var recipes = {
-    "Recipe 1":[{"crop":"Cassava", "startYear":1, "endYear":9, "efficiency":80}, {"crop":"SugarPalm", "startYear":1, "endYear":20, "efficiency":100}],
-    "Recipe 2":[{"crop":"OilPalm", "startYear":1, "endYear":20, "efficiency":100}],
-    "Recipe 3":[{"crop":"Cassava", "startYear":5, "endYear":15, "efficiency":100}]
+    "Recipe 1":[{"crop":"Cassava", "startyear":1, "endyear":9, "efficiency":80}, {"crop":"SugarPalm", "startyear":1, "endyear":20, "efficiency":100}],
+    "Recipe 2":[{"crop":"OilPalm", "startyear":1, "endyear":20, "efficiency":100}],
+    "Recipe 3":[{"crop":"Cassava", "startyear":5, "endyear":15, "efficiency":100}]
 };
+var recipeNames = Object.keys(recipes);
 var outline = loadShape('../static/data/ITCI_Boundary.geojson');
 var shapes = [loadShape('../static/data/Scenario2.geojson')];
 var FID = 0;

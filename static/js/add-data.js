@@ -72,8 +72,8 @@ function retrieveData(feature, array, scenario) {
                     for (var i= 0; i<currentRecipe.length; i++) {
                         if (currentRecipe[i]['crop'] === crop) {
                             var efficiency = currentRecipe[i]['efficiency'] / 100.0;
-                            var startYear = currentRecipe[i]['startYear'];
-                            var endYear = currentRecipe[i]['endYear'];
+                            var startYear = currentRecipe[i]['startyear'];
+                            var endYear = currentRecipe[i]['endyear'];
                         }
                     }
 

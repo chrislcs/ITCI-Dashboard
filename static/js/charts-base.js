@@ -40,7 +40,7 @@ function createPieChart(chart, dimension, group) {
         });
 }
 
-function createBarChart(chart, dimension, group, minX, maxX,xlabel,ylabel, stack, stackOn) {
+function createLinearBarChart(chart, dimension, group, minX, maxX, xlabel, ylabel, stack, stackOn) {
     chart
         .x(d3.scale.linear().domain([minX, maxX]))
         //.y(d3.scale.linear().domain([0, maxY])) //.range([0, (chart.height() - 50)])
@@ -72,6 +72,24 @@ function createBarChart(chart, dimension, group, minX, maxX,xlabel,ylabel, stack
             }
         }
     }
+
+    chart.on('renderlet', function (chart) {
+        chart.selectAll("g.x text")
+            .attr("transform", "translate(6, 0)");
+    });
+}
+
+function createOrdinalBarChart(chart, dimension, group) {
+    chart
+        .x(d3.scale.ordinal())
+        .xUnits(dc.units.ordinal)
+        .elasticY(true)
+        .brushOn(false)
+        //.yAxisLabel("This is the Y Axis!")
+        .dimension(dimension)
+        .group(group)
+        //.xAxisLabel("Year")
+        .yAxis().tickFormat(d3.format("s"));
 
     chart.on('renderlet', function (chart) {
         chart.selectAll("g.x text")
