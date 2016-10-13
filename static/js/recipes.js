@@ -8,17 +8,38 @@ $(function() {
     });
 });
 
+function editRecipe(obj, param) {
+    var recipeIndex = obj.id.match(/\d/g)[0];
+    var cropIndex = obj.id.match(/\d/g)[1]-1;
+    var recipeName = document.getElementById("Recipe-" + recipeIndex + "-Name").value;
+    recipes[recipeName][cropIndex][param] = obj.value;
+}
+
+function changeName(obj) {
+    var recipeIndex = obj.id.match(/\d/g)[0];
+    var oldName = recipeNames[recipeIndex-1];
+    var newName = obj.value;
+
+    if (oldName !== newName) {
+        Object.defineProperty(recipes, newName,
+            Object.getOwnPropertyDescriptor(recipes, oldName));
+        delete recipes[oldName];
+    }
+    recipeNames[recipeIndex-1] = newName
+}
+
 var recipeCount = 0;
 
-function setRecipe(tableID, crops) {
+function setRecipe(tableID, crops, initial) {
     for (var i = 0; i < crops.length; i++) {
 
         var val = crops[i].crop;
         var sel = document.getElementById(tableID + "-Select-" + (i+1));
         if (!sel) {
-            addCrop(tableID)
+            addCrop(tableID, initial);
+            sel = document.getElementById(tableID + "-Select-" + (i+1));
         }
-        sel = document.getElementById(tableID + "-Select-" + (i+1));
+
         var opts = sel.options;
         for (var opt, j = 0; opt = opts[j]; j++) {
             if (opt.value == val) {
@@ -27,15 +48,15 @@ function setRecipe(tableID, crops) {
             }
         }
 
-        document.getElementById(tableID + "-StartYear-" + (i+1)).value = crops[i].startYear;
-        document.getElementById(tableID + "-EndYear-" + (i+1)).value = crops[i].endYear;
-        document.getElementById(tableID + "-Efficiency-" + (i+1)).value = crops[i].efficiency;
+        document.getElementById(tableID + "-StartYear-" + (i+1)).value = crops[i]['startyear'];
+        document.getElementById(tableID + "-EndYear-" + (i+1)).value = crops[i]['endyear'];
+        document.getElementById(tableID + "-Efficiency-" + (i+1)).value = crops[i]['efficiency'];
     }
 }
 
-function addRecipe() {
+function addRecipe(initial) {
     recipeCount += 1;
-    var newRecipe = '<h3><input type="text" id="Recipe-' + recipeCount + '-Name" value="Recipe ' + recipeCount + '"></h3>' +
+    var newRecipe = '<h3><input type="text" class="recipe-name" id="Recipe-' + recipeCount + '-Name" value="Recipe ' + recipeCount + '"/></h3>' +
         '<div><TABLE id="Recipe-' + recipeCount + '" width="350px" border="1">' +
         '<tr><th>Crop</th><th>Start Year</th><th>End Year</th><th>Efficiency</th><th>Remove</th></tr>' +
         '<TR><TD><SELECT id="Recipe-' + recipeCount + '-Select-1" class="crop-select"><OPTION value="Cassava">Cassava</OPTION>' +
@@ -50,55 +71,112 @@ function addRecipe() {
         '<INPUT type="button" value="Remove Recipe" class="removeRecipe"/></div>';
     $('.recipes').append(newRecipe);
     $('.recipes').accordion("refresh");
+
+    if (initial !== true) {
+        recipes["Recipe " + recipeCount] = [{
+            crop: 'Cassava',
+            startyear: 1,
+            endyear: 20,
+            efficiency: 100
+        }];
+        recipeNames.push("Recipe " + recipeCount);
+
+        $(document).ready( function() {
+            $('.crop-select').on('change', function() {
+                editRecipe(this, 'crop');
+            });
+            $('.start-year').on('change', function() {
+                editRecipe(this, 'startyear');
+            });
+            $('.end-year').on('change', function() {
+                editRecipe(this, 'endyear');
+            });
+            $('.efficiency').on('change', function() {
+                editRecipe(this, 'efficiency');
+            });
+            $('.recipe-name').on('change keyup paste', function() {
+                changeName(this)
+            });
+        });
+    }
 }
 
 $('#addRecipe').click(addRecipe);
 
 $(document).on('click', '.removeRecipe' , function() {
-    // Remove accordion tab
     var parent = $(this).closest('div');
     var head = parent.prev('h3');
-    parent.add(head).fadeOut('slow',function(){$(this).remove();});
-
-    // Redo IDs
     var deletedRecipeID = parseInt(parent[0].id.replace( /^\D+/g, ''));
+    recipeNames = [];
+    var recipeName = document.getElementById("Recipe-" + (deletedRecipeID/2) + "-Name").value;
     var recipeID = 1;
     var pattern;
     var string;
+
+    delete recipes[recipeName];
+
+    // Redo IDs
     for(var i=1; i<=recipeCount; i++) {
         var id = (2*i)-1;
         if (deletedRecipeID !== id+1) {
-            pattern = /Recipe-\d/g;
+            recipeNames.push(document.getElementById("Recipe-" + i + "-Name").value);
+            pattern = new RegExp("Recipe-" + i, 'g');
             string = "Recipe-" + recipeID;
 
             $('#accordion').find('*').each(function () {
                 this.innerHTML = this.innerHTML.replace(pattern, string);
             });
 
-            console.log(document.getElementById('ui-id-' + (id)).id);
-            console.log("ui-id-" + (recipeID*2-1));
-
             document.getElementById('ui-id-' + (id)).id = "ui-id-" + (recipeID*2-1);
             document.getElementById('ui-id-' + (id+1)).id = "ui-id-" + (recipeID*2);
 
             recipeID += 1
         }
-
-        //
     }
+
+     // Remove accordion tab
+    parent.add(head).fadeOut('slow',function(){$(this).remove();});
+
+    // restore correct values in recipes
+    for(i=0; i<recipeNames.length; i++) {
+        recipeName = recipeNames[i];
+        setRecipe("Recipe-" + (i+1), recipes[recipeName], true);
+    }
+
+    $(document).ready( function() {
+        $('.crop-select').on('change', function() {
+            editRecipe(this, 'crop');
+        });
+        $('.start-year').on('change', function() {
+            editRecipe(this, 'startyear');
+        });
+        $('.end-year').on('change', function() {
+            editRecipe(this, 'endyear');
+        });
+        $('.efficiency').on('change', function() {
+            editRecipe(this, 'efficiency');
+        });
+        $('.recipe-name').on('change keyup paste', function() {
+            changeName(this)
+        });
+    });
 
     recipeCount -= 1;
 });
 
-function addCrop(tableID) {
+function addCrop(tableID, initial) {
+    // Get table object
     var table = document.getElementById(tableID);
 
+    // Insert new row at end of table
     var rowCount = table.rows.length;
     var row = table.insertRow(rowCount);
 
+    // Get column count and table number
     var colCount = table.rows[0].cells.length;
     var tableNumber = tableID.match(/\d/g)[0];
 
+    // Insert new cells
     for(var i=0; i<colCount; i++) {
         var newcell	= row.insertCell(i);
 
@@ -125,21 +203,55 @@ function addCrop(tableID) {
 
         }
     }
+
+    // Add to recipes variable
+    if (initial !== true) {
+        var recipeName = document.getElementById("Recipe-" + tableNumber + "-Name").value;
+        recipes[recipeName].push({
+            crop: 'Cassava',
+            startyear: 1,
+            endyear: 20,
+            efficiency: 100
+        });
+
+        $(document).ready( function() {
+            $('.crop-select').on('change', function() {
+                editRecipe(this, 'crop');
+            });
+            $('.start-year').on('change', function() {
+                editRecipe(this, 'startyear');
+            });
+            $('.end-year').on('change', function() {
+                editRecipe(this, 'endyear');
+            });
+            $('.efficiency').on('change', function() {
+                editRecipe(this, 'efficiency');
+            });
+            $('.recipe-name').on('change keyup paste', function() {
+                changeName(this)
+            });
+        });
+    }
 }
 
 function removeCrop(tableID, rowID) {
     // Remove row by row ID
     var table = document.getElementById(tableID);
-    table.deleteRow(rowID.match(/\d/g)[1]);
+    var rowIndex = rowID.match(/\d/g)[1];
+    table.deleteRow(rowIndex);
 
-    // Redo IDs
     var tableNumber = tableID.match(/\d/g)[0];
     var rowCount = table.rows.length;
+    var recipeName = document.getElementById("Recipe-" + tableNumber + "-Name").value;
+    recipes[recipeName].splice(rowIndex-1, 1);
+
+    // Redo IDs
     for(var i=1; i<rowCount; i++) {
         var pattern = /Recipe-\d-Remove-\d/g;
         var string = "Recipe-" + tableNumber + "-Remove-" + i;
         table.rows[i].cells[4].innerHTML = table.rows[i].cells[4].innerHTML.replace(pattern, string);
 
+        // Redo IDs in the HTML
         pattern = /Recipe-\d-Select-\d/g;
         string = "Recipe-" + tableNumber + "-Select-" + i;
         table.rows[i].cells[0].innerHTML = table.rows[i].cells[0].innerHTML.replace(pattern, string);
@@ -155,64 +267,66 @@ function removeCrop(tableID, rowID) {
         pattern = /Recipe-\d-Efficiency-\d/g;
         string = "Recipe-" + tableNumber + "-Efficiency-" + i;
         table.rows[i].cells[3].innerHTML = table.rows[i].cells[3].innerHTML.replace(pattern, string);
-    }
-}
 
-function tableToJson(table) {
-    var data = [];
-
-    // first row needs to be headers
-    var headers = [];
-    for (var i=0; i<table.rows[0].cells.length; i++) {
-        headers[i] = table.rows[0].cells[i].innerHTML.toLowerCase().replace(/ /gi,'');
-    }
-
-    // go through cells
-    for (var i=1; i<table.rows.length; i++) {
-
-        var tableRow = table.rows[i];
-        var rowData = {};
-
-        for (var j=0; j<tableRow.cells.length; j++) {
-
-            if (tableRow.cells[j].cellIndex === 0) {
-                try {
-                    rowData[headers[j]] = tableRow.cells[j].childNodes[1].value;
-                }
-                catch (err) {
-                    rowData[headers[j]] = tableRow.cells[j].childNodes[0].value;
-                }
-            } else if (tableRow.cells[j].cellIndex === 1 || tableRow.cells[j].cellIndex === 2 || tableRow.cells[j].cellIndex === 3) {
-                rowData[headers[j]] = tableRow.cells[j].childNodes[0].value;
+        // restore correct values
+        var val = recipes[recipeName][i-1]['crop'];
+        var sel = document.getElementById("Recipe-" + tableNumber + "-Select-" + i);
+        var opts = sel.options;
+        for (var opt, j = 0; opt = opts[j]; j++) {
+            if (opt.value == val) {
+                sel.selectedIndex = j;
+                break;
             }
         }
-
-        data.push(rowData);
+        document.getElementById("Recipe-" + tableNumber + "-StartYear-" + i).value = recipes[recipeName][i-1]['startyear'];
+        document.getElementById("Recipe-" + tableNumber + "-EndYear-" + i).value = recipes[recipeName][i-1]['endyear'];
+        document.getElementById("Recipe-" + tableNumber + "-Efficiency-" + i).value = recipes[recipeName][i-1]['efficiency'];
     }
 
-    return data;
-}
-
-function confirmRecipes(reload) {
-    for (var recipeID = 1; recipeID <= recipeCount; recipeID++) {
-        var table = document.getElementById("Recipe-" + recipeID);
-        var recipeName = document.getElementById("Recipe-" + recipeID + "-Name").value;
-        recipes[recipeName] = tableToJson(table);
-    }
-
-    if (reload === true) {
-        reloadData()
-    }
+    $(document).ready( function() {
+        $('.crop-select').on('change', function() {
+            editRecipe(this, 'crop');
+        });
+        $('.start-year').on('change', function() {
+            editRecipe(this, 'startyear');
+        });
+        $('.end-year').on('change', function() {
+            editRecipe(this, 'endyear');
+        });
+        $('.efficiency').on('change', function() {
+            editRecipe(this, 'efficiency');
+        });
+        $('.recipe-name').on('change keyup paste', function() {
+            changeName(this)
+        });
+    });
 }
 
 $(document).ready( function() {
-
     for (var i=1; i<=Object.keys(recipes).length; i++) {
-        addRecipe();
-        setRecipe("Recipe-" + i, recipes["Recipe " + i]);
+        addRecipe(true);
+        setRecipe("Recipe-" + i, recipes["Recipe " + i], true);
     }
-    confirmRecipes();
 });
+
+$(document).ready( function() {
+    $('.crop-select').on('change', function() {
+        editRecipe(this, 'crop');
+    });
+    $('.start-year').on('change', function() {
+        editRecipe(this, 'startyear');
+    });
+    $('.end-year').on('change', function() {
+        editRecipe(this, 'endyear');
+    });
+    $('.efficiency').on('change', function() {
+        editRecipe(this, 'efficiency');
+    });
+    $('.recipe-name').on('change keyup paste', function() {
+        changeName(this)
+    });
+});
+
 
 function reloadData() {
     data = [];
