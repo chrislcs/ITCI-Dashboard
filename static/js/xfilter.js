@@ -22,13 +22,24 @@ var biomassSum = scenarioDim.group().reduceSum(function (d) { return d.biomass }
 var jobsSum = scenarioDim.group().reduceSum(function (d) { return d.jobs; });
 var incomeByYear = yearDim.group().reduceSum(function (d) {
     if (d.crop === "Cassava") {
-        return d.biomass * cassavaPrice;
+        return d.biomass * cassavaPrice ;
     } else if (d.crop === "SugarPalm") {
-        return d.biomass * palmsugarPrice;
+        return d.biomass * palmsugarPrice ;
     } else if (d.crop === "OilPalm") {
-        return d.biomass * palmoilPrice;
+        return d.biomass * palmoilPrice ;
     }
 });
+var expenseByYear = yearDim.group().reduceSum(function (d) {
+    if (d.crop === "Cassava") {
+        return ((d.biomass/20)* d.distance_mean*2*(1/8)*petrolPrice);
+    } else if (d.crop === "SugarPalm") {
+        return ((d.biomass/10)* d.distance_mean*2*(1/8)*petrolPrice);
+    } else if (d.crop === "OilPalm") {
+        return  ((d.biomass/20)* d.distance_mean*2*(1/8)*petrolPrice);
+    }
+});
+
+
 var biomassByRecipeStack = yearDim.group().reduce(
     function (p, v) {
         p[v.landuse] = (p[v.landuse] || 0) + v.biomass;

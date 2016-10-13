@@ -27,7 +27,7 @@ map.on('draw:created', function (e) {
     //updateDrawControl(geolayers[currentLayer]);
 
     // update graph
-    var recipeData = loadDataFromDatabase(shape);
+    var recipeData = loadRecipeDataFromDatabase(shape);
     for (var y = 1; y < 21; y++) {
         for (var crop in recipeData) {
             if (recipeData.hasOwnProperty(crop)) {
@@ -148,7 +148,7 @@ $('#mapid').on('click', '.edit', function () {
         var scenario = FIDDim.top(1)[0].scenario;
         cf.remove();
 
-        var recipeData = loadDataFromDatabase(geolayers[currentLayer]._layers[lastClickedFeature].feature);
+        var recipeData = loadRecipeDataFromDatabase(geolayers[currentLayer]._layers[lastClickedFeature].feature);
         for (var y = 1; y < 21; y++) {
             for (var crop in recipeData) {
                 if (recipeData.hasOwnProperty(crop)) {

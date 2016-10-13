@@ -71,7 +71,7 @@ var recipes = {
 };
 var recipeNames = Object.keys(recipes);
 var outline = loadShape('../static/data/ITCI_Boundary.geojson');
-var shapes = [loadShape('../static/data/Scenario1.geojson')];
+var shapes = [loadShape('../static/data/Scenario2.geojson')];
 var FID = 0;
 var data = [];
 var colorScale = d3.scale.category10();
@@ -85,5 +85,5 @@ var drawControl;
 var cassavaPrice = 350;
 var palmoilPrice = 580;
 var palmsugarPrice = 668;
-//var oilPrice = 50;
+var petrolPrice = 1000;
 var crops = ["Cassava", "SugarPalm", "OilPalm"];

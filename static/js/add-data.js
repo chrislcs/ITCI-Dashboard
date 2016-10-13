@@ -18,7 +18,7 @@ function countItems(feature, key) {
     }
 }
 
-function loadDataFromDatabase(feature) {
+function loadRecipeDataFromDatabase(feature) {
     var currentRecipe = recipes[feature["properties"]["landuse"]];
     var returnData = {};
     if(typeof currentRecipe != 'undefined') {
@@ -43,12 +43,28 @@ function loadDataFromDatabase(feature) {
     return returnData;
 }
 
+function loadDistanceDataFromDatabase(feature) {
+    var returnData = {};
+    returnData['distance_mean'] = getUrlJsonSync('/retrieve_data',{
+        crop: 'transportdist_wgs',
+        shape: JSON.stringify(feature.geometry)
+    });
+    if (returnData['distance_mean'].valid === "OK") {
+                returnData['distance_mean'] = returnData['distance_mean'].data;
+            } else {
+                console.log("ERROR: failed to load data from database for feature with ID: " + FID + ", transportdist_wgs ");
+                returnData['distance_mean'] = 0;
+            }
+    return returnData;
+}
+
 function retrieveData(feature, array, scenario) {
     function addData(feature) {
         var area = turf.area(feature);
         feature["properties"]["area"] = area;
         feature["properties"]["FID"] = FID;
-        var recipeData = loadDataFromDatabase(feature);
+        var recipeData = loadRecipeDataFromDatabase(feature);
+        var distData = loadDistanceDataFromDatabase(feature);
         for (var y = 1; y < 21; y++) {
             for (var crop in recipeData) {
                 if (recipeData.hasOwnProperty(crop)) {
@@ -70,6 +86,7 @@ function retrieveData(feature, array, scenario) {
                             "area": area,
                             "crop": crop,
                             "biomass": recipeData[crop][y-startYear+1]["sum"] * efficiency,
+                            "distance_mean": distData['distance_mean'][1]["mean"],
                             "jobs": (Math.random() * area) / (100000 * 20)
                         });
                     } else {
@@ -81,6 +98,7 @@ function retrieveData(feature, array, scenario) {
                             "area": area,
                             "crop": crop,
                             "biomass": 0,
+                            "distance_mean": 0,
                             "jobs": 0
                         });
                     }
