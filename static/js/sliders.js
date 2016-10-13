@@ -22,7 +22,17 @@ $(function() {
                     return d.biomass * palmoilPrice;
                 }
             });
+            var incomeByCrop = cropDim.group().reduceSum(function (d) {
+                if (d.crop === "Cassava") {
+                    return d.biomass * cassavaPrice ;
+                } else if (d.crop === "SugarPalm") {
+                    return d.biomass * palmsugarPrice ;
+                } else if (d.crop === "OilPalm") {
+                    return d.biomass * palmoilPrice ;
+                }
+            });
             createLineChart(profitChart, yearDim, incomeByYear, minYear, maxYear);
+            createOrdinalBarChart(incomePerCropChart, cropDim, incomeByCrop, minYear, maxYear, false);
             dc.redrawAll();
         }
     });
@@ -49,7 +59,17 @@ $(function() {
                     return d.biomass * palmoilPrice;
                 }
             });
+            var incomeByCrop = cropDim.group().reduceSum(function (d) {
+                if (d.crop === "Cassava") {
+                    return d.biomass * cassavaPrice ;
+                } else if (d.crop === "SugarPalm") {
+                    return d.biomass * palmsugarPrice ;
+                } else if (d.crop === "OilPalm") {
+                    return d.biomass * palmoilPrice ;
+                }
+            });
             createLineChart(profitChart, yearDim, incomeByYear, minYear, maxYear);
+            createOrdinalBarChart(incomePerCropChart, cropDim, incomeByCrop, minYear, maxYear, false);
             dc.redrawAll();
         }
     });
@@ -76,7 +96,17 @@ $(function() {
                     return d.biomass * palmoilPrice;
                 }
             });
+            var incomeByCrop = cropDim.group().reduceSum(function (d) {
+                if (d.crop === "Cassava") {
+                    return d.biomass * cassavaPrice ;
+                } else if (d.crop === "SugarPalm") {
+                    return d.biomass * palmsugarPrice ;
+                } else if (d.crop === "OilPalm") {
+                    return d.biomass * palmoilPrice ;
+                }
+            });
             createLineChart(profitChart, yearDim, incomeByYear, minYear, maxYear);
+            createOrdinalBarChart(incomePerCropChart, cropDim, incomeByCrop, minYear, maxYear, false);
             dc.redrawAll();
         }
     });
