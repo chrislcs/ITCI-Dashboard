@@ -15,7 +15,7 @@ def connect_to_db():
     try:
         conn = psycopg2.connect(database='itci', user='postgres',
                                 password='geodan123', host='localhost',
-                                port=5432)
+                                port=5433)
         conn.set_session(autocommit=False)
         return conn
     except:
