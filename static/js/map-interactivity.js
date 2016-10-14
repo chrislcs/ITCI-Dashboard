@@ -57,8 +57,11 @@ map.on('draw:deleted', function (e) {
     }
     FIDDim.filterAll();
 
+    // Reapply scenario filter using the sync group
     syncGroup.forEach(function (chart) {
+        // remove current filters
         chart.filterAll();
+        // apply correct filter in data and chart
         chart.filter(currentLayer + 1);
         chart.filters().fill(currentLayer + 1);
     });
@@ -83,8 +86,11 @@ $('#add-scenario').bind('click', function () {
 
     legend = updateLegend(legend, Object.keys(landuses[currentLayer]));
 
+    // Reapply scenario filter using the sync group
     syncGroup.forEach(function (chart) {
+        // remove current filters
         chart.filterAll();
+        // apply correct filter in data and chart
         chart.filter(currentLayer + 1);
         chart.filters().fill(currentLayer + 1);
     });
@@ -128,7 +134,7 @@ $('#mapid').on('click', '.edit', function () {
         geolayers[currentLayer]._layers[lastClickedFeature].options.fillColor = colorScale(newLanduse);
         geolayers[currentLayer]._layers[lastClickedFeature].setStyle({fillColor: colorScale(newLanduse)});
 
-        // update the data in the crossfilter
+        // Remove the data from the crossfilter
         FIDDim.filter(geolayers[currentLayer]._layers[lastClickedFeature].feature.properties.FID);
         var currentFID = FIDDim.top(1)[0].FID;
         var area = FIDDim.top(1)[0].area;
@@ -136,10 +142,14 @@ $('#mapid').on('click', '.edit', function () {
         cf.remove();
         FIDDim.filterAll();
 
+        // Add new data to the crossfilter
         addDataToXfilter(geolayers[currentLayer]._layers[lastClickedFeature].feature, newLanduse, currentFID, scenario, area);
 
+        // Reapply scenario filter using the sync group
         syncGroup.forEach(function (chart) {
+            // remove current filters
             chart.filterAll();
+            // apply correct filter in data and chart
             chart.filter(currentLayer + 1);
             chart.filters().fill(currentLayer + 1);
         });
