@@ -156,7 +156,7 @@ function style(feature) {
         opacity:0.5,
         color: 'black',
         dashArray: '3',
-        fillOpacity: 0.2
+        fillOpacity: 0.5
     }
 }
 

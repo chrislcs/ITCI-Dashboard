@@ -2,6 +2,8 @@ from flask import Flask
 from flask import render_template, request, jsonify
 import psycopg2
 from psycopg2.extensions import AsIs
+import ConfigParser
+import io
 
 app = Flask(__name__)
 
@@ -11,11 +13,30 @@ def index():
     return render_template("index.html")
 
 
+def read_db_config(fname):
+    with open(fname) as f:
+        config_file = f.read()
+
+    config = ConfigParser.RawConfigParser(allow_no_value=True)
+    config.readfp(io.BytesIO(config_file))
+
+    database = config.get('database', 'database')
+    user = config.get('database', 'user')
+    password = config.get('database', 'password')
+    host = config.get('database', 'host')
+    port = int(config.get('database', 'port'))
+
+    return [database, user, password, host, port]
+
+
 def connect_to_db():
+    database_config = read_db_config('database.config')
     try:
-        conn = psycopg2.connect(database='itci', user='postgres',
-                                password='geodan123', host='localhost',
-                                port=5433)
+        conn = psycopg2.connect(database=database_config[0],
+                                user=database_config[1],
+                                password=database_config[2],
+                                host=database_config[3],
+                                port=database_config[4])
         conn.set_session(autocommit=False)
         return conn
     except:

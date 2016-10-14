@@ -40,7 +40,7 @@ map.on('draw:created', function (e) {
 
 map.on('draw:deleted', function (e) {
     // remove all current filters on dimensions and charts
-    removeFilters(dimensionList, chartList);
+    removeFilters(dimensionList);
 
     for (var layer in e.layers._layers) {
         if (e.layers._layers.hasOwnProperty(layer)) {
@@ -56,6 +56,15 @@ map.on('draw:deleted', function (e) {
         }
     }
     FIDDim.filterAll();
+
+    // Reapply scenario filter using the sync group
+    syncGroup.forEach(function (chart) {
+        // remove current filters
+        chart.filterAll();
+        // apply correct filter in data and chart
+        chart.filter(currentLayer + 1);
+        chart.filters().fill(currentLayer + 1);
+    });
 
     // redraw charts and legend
     dc.redrawAll();
@@ -77,14 +86,12 @@ $('#add-scenario').bind('click', function () {
 
     legend = updateLegend(legend, Object.keys(landuses[currentLayer]));
 
-    //var filterOnce;
+    // Reapply scenario filter using the sync group
     syncGroup.forEach(function (chart) {
-        //if (!filterOnce) {
-        //    filterOnce = true;
-            chart.filterAll();
-            chart.filter(currentLayer + 1);
-            //return;
-        //}
+        // remove current filters
+        chart.filterAll();
+        // apply correct filter in data and chart
+        chart.filter(currentLayer + 1);
         chart.filters().fill(currentLayer + 1);
     });
 
@@ -108,7 +115,7 @@ $('#mapid').on('click', '.edit', function () {
 
     if (Object.keys(recipes).indexOf(newLanduse)>=0) {
         // remove all current filters on dimensions and charts
-        removeFilters(dimensionList, chartList);
+        removeFilters(dimensionList);
 
         // update legend entries
         landuses[currentLayer][geolayers[currentLayer]._layers[lastClickedFeature].feature.properties.landuse]--;
@@ -127,16 +134,26 @@ $('#mapid').on('click', '.edit', function () {
         geolayers[currentLayer]._layers[lastClickedFeature].options.fillColor = colorScale(newLanduse);
         geolayers[currentLayer]._layers[lastClickedFeature].setStyle({fillColor: colorScale(newLanduse)});
 
-        // update the data in the crossfilter
+        // Remove the data from the crossfilter
         FIDDim.filter(geolayers[currentLayer]._layers[lastClickedFeature].feature.properties.FID);
         var currentFID = FIDDim.top(1)[0].FID;
         var area = FIDDim.top(1)[0].area;
         var scenario = FIDDim.top(1)[0].scenario;
         cf.remove();
+        FIDDim.filterAll();
 
+        // Add new data to the crossfilter
         addDataToXfilter(geolayers[currentLayer]._layers[lastClickedFeature].feature, newLanduse, currentFID, scenario, area);
 
-        FIDDim.filterAll();
+        // Reapply scenario filter using the sync group
+        syncGroup.forEach(function (chart) {
+            // remove current filters
+            chart.filterAll();
+            // apply correct filter in data and chart
+            chart.filter(currentLayer + 1);
+            chart.filters().fill(currentLayer + 1);
+        });
+
         dc.redrawAll();
     } else if (newLanduse !== null) {
         alert('Recipe not found, check recipes tab for names')

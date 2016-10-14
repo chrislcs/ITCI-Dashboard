@@ -22,7 +22,7 @@ $(function() {
                     return d.biomass * palmoilPrice;
                 }
             });
-            var incomeByCrop = cropDim.group().reduceSum(function (d) {
+            incomeByCrop = cropDim.group().reduceSum(function (d) {
                 if (d.crop === "Cassava") {
                     return d.biomass * cassavaPrice ;
                 } else if (d.crop === "SugarPalm") {
@@ -31,7 +31,17 @@ $(function() {
                     return d.biomass * palmoilPrice ;
                 }
             });
-            createMultiLineChart(profitChart, yearDim, incomeByYear, minYear, maxYear);
+            expenseByYear = yearDim.group().reduceSum(function (d) {
+                if (d.crop === "Cassava") {
+                    return (((d.biomass/20)* d.distance_mean*2*(1/8)*petrolPrice)+ d.jobs*5000);
+                } else if (d.crop === "SugarPalm") {
+                    return (((d.biomass/10)* d.distance_mean*2*(1/8)*petrolPrice)+d.jobs*5000);
+                } else if (d.crop === "OilPalm") {
+                    return  (((d.biomass/20)* d.distance_mean*2*(1/8)*petrolPrice)+d.jobs*5000);
+                }
+            });
+
+            createMultiLineChart(profitChart, yearDim, [incomeByYear, expenseByYear], minYear, maxYear);
             createOrdinalBarChart(incomePerCropChart, cropDim, incomeByCrop, minYear, maxYear, false);
             dc.redrawAll();
         }
@@ -59,7 +69,7 @@ $(function() {
                     return d.biomass * palmoilPrice;
                 }
             });
-            var incomeByCrop = cropDim.group().reduceSum(function (d) {
+            incomeByCrop = cropDim.group().reduceSum(function (d) {
                 if (d.crop === "Cassava") {
                     return d.biomass * cassavaPrice ;
                 } else if (d.crop === "SugarPalm") {
@@ -68,7 +78,17 @@ $(function() {
                     return d.biomass * palmoilPrice ;
                 }
             });
-            createMultiLineChart(profitChart, yearDim, incomeByYear, minYear, maxYear);
+            expenseByYear = yearDim.group().reduceSum(function (d) {
+                if (d.crop === "Cassava") {
+                    return (((d.biomass/20)* d.distance_mean*2*(1/8)*petrolPrice)+ d.jobs*5000);
+                } else if (d.crop === "SugarPalm") {
+                    return (((d.biomass/10)* d.distance_mean*2*(1/8)*petrolPrice)+d.jobs*5000);
+                } else if (d.crop === "OilPalm") {
+                    return  (((d.biomass/20)* d.distance_mean*2*(1/8)*petrolPrice)+d.jobs*5000);
+                }
+            });
+
+            createMultiLineChart(profitChart, yearDim, [incomeByYear, expenseByYear], minYear, maxYear);
             createOrdinalBarChart(incomePerCropChart, cropDim, incomeByCrop, minYear, maxYear, false);
             dc.redrawAll();
         }
@@ -96,7 +116,7 @@ $(function() {
                     return d.biomass * palmoilPrice;
                 }
             });
-            var incomeByCrop = cropDim.group().reduceSum(function (d) {
+            incomeByCrop = cropDim.group().reduceSum(function (d) {
                 if (d.crop === "Cassava") {
                     return d.biomass * cassavaPrice ;
                 } else if (d.crop === "SugarPalm") {
@@ -105,7 +125,17 @@ $(function() {
                     return d.biomass * palmoilPrice ;
                 }
             });
-            createMultiLineChart(profitChart, yearDim, incomeByYear, minYear, maxYear);
+            expenseByYear = yearDim.group().reduceSum(function (d) {
+                if (d.crop === "Cassava") {
+                    return (((d.biomass/20)* d.distance_mean*2*(1/8)*petrolPrice)+ d.jobs*5000);
+                } else if (d.crop === "SugarPalm") {
+                    return (((d.biomass/10)* d.distance_mean*2*(1/8)*petrolPrice)+d.jobs*5000);
+                } else if (d.crop === "OilPalm") {
+                    return  (((d.biomass/20)* d.distance_mean*2*(1/8)*petrolPrice)+d.jobs*5000);
+                }
+            });
+
+            createMultiLineChart(profitChart, yearDim, [incomeByYear, expenseByYear], minYear, maxYear);
             createOrdinalBarChart(incomePerCropChart, cropDim, incomeByCrop, minYear, maxYear, false);
             dc.redrawAll();
         }
