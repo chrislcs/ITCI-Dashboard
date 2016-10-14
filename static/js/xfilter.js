@@ -71,13 +71,23 @@ var biomassByCropStack = yearDim.group().reduce(
         return {};
     }
 );
-//var jobsByYear = yearDim.group().reduceSum(function(d) { return d.jobs; });
-var jobsByYearStack = yearDim.group().reduce(
+var jobsByRecipeStack = yearDim.group().reduce(
     function (p, v) {
         p[v.landuse] = (p[v.landuse] || 0) + v.jobs;
         return p;
     }, function (p, v) {
         p[v.landuse] = (p[v.landuse] || 0) - v.jobs;
+        return p;
+    }, function () {
+        return {};
+    }
+);
+var jobsByCropStack = yearDim.group().reduce(
+    function (p, v) {
+        p[v.crop] = (p[v.crop] || 0) + v.jobs;
+        return p;
+    }, function (p, v) {
+        p[v.crop] = (p[v.crop] || 0) - v.jobs;
         return p;
     }, function () {
         return {};

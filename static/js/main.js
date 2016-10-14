@@ -65,18 +65,20 @@ function loadShape(url) {
 }
 
 var recipes = {
-    "Recipe 1":{"crops": [{"crop":"Cassava", "startyear":1, "endyear":9, "area": 50, "efficiency":80},
+    "Recipe 1":{"crops": [{"crop":"Cassava", "startyear":1, "endyear":9, "area": 50, "efficiency":20},
                           {"crop":"SugarPalm", "startyear":1, "endyear":20, "area": 50, "efficiency":100}],
                 "labor": 50},
     "Recipe 2":{"crops": [{"crop":"OilPalm", "startyear":1, "endyear":20, "area": 100, "efficiency":100}],
                 "labor": 50},
-    "Recipe 3":{"crops": [{"crop":"Cassava", "startyear":5, "endyear":15, "area": 100, "efficiency":100}],
+    "Recipe 3":{"crops": [{"crop":"Cassava", "startyear":5, "endyear":15, "area": 100, "efficiency":20}],
+                "labor": 50},
+    "Recipe 4":{"crops": [{"crop":"OilPalm", "startyear":1, "endyear":20, "area": 100, "efficiency":100}],
                 "labor": 50}
 };
 var recipeNames = Object.keys(recipes);
 var outline = loadShape('../static/data/ITCI_Boundary.geojson');
 var outlineInside = loadShape('../static/data/ITCI_Boundary_inside.geojson');
-var shapes = [loadShape('../static/data/Scenario2.geojson')];
+var shapes = [loadShape('../static/data/Scenario2.geojson'), loadShape('../static/data/Scenario1.geojson')];
 var FID = 0;
 var colorScale = d3.scale.category10();
 var lastClickedFeature;

@@ -19,7 +19,7 @@ map.on('draw:created', function (e) {
         landuses[currentLayer][shapeLanduse]++;
     }
 
-    var shape_for_db = JSON.stringify(shape.geometry);
+    //var shape_for_db = JSON.stringify(shape.geometry);
 
     geolayers[currentLayer].addData(shape);
 
@@ -77,14 +77,14 @@ $('#add-scenario').bind('click', function () {
 
     legend = updateLegend(legend, Object.keys(landuses[currentLayer]));
 
-    var filterOnce;
+    //var filterOnce;
     syncGroup.forEach(function (chart) {
-        if (!filterOnce) {
-            filterOnce = true;
+        //if (!filterOnce) {
+        //    filterOnce = true;
             chart.filterAll();
             chart.filter(currentLayer + 1);
-            return;
-        }
+            //return;
+        //}
         chart.filters().fill(currentLayer + 1);
     });
 
@@ -94,8 +94,9 @@ $('#add-scenario').bind('click', function () {
         "scenario": currentLayer + 1,
         "landuse": '',
         "area": 0,
+        "crop": '',
         "biomass": 0,
-        "testData": 0,
+        "distance_mean": 0,
         "jobs": 0
     }]);
 
