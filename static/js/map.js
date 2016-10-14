@@ -14,6 +14,12 @@ var terrain = new L.tileLayer('https://api.mapbox.com/styles/v1/hertshoorn/ciu8e
     maxZoom: 18
 });
 
+var suitabilityPS = new L.tileLayer('https://api.mapbox.com/styles/v1/hertshoorn/ciu9ho7s5000t2ipsvcr76i3c/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGVydHNob29ybiIsImEiOiJjaXNuZW1jYjMwMDB3MnhrMWd1ZHZ6ODd4In0.ud2kfxoF2nh9bACEipQDnA', {
+    maxZoom: 18
+});
+
+
+
 var DEM = new L.TileLayer.WMS('http://localhost:8080/geoserver/ITCI_Dashboard/wms', {
     layers: 'ITCI_Dashboard:DEM',
     styles: '',
@@ -25,7 +31,7 @@ var DEM = new L.TileLayer.WMS('http://localhost:8080/geoserver/ITCI_Dashboard/wm
 
 var map = L.map('mapid', {
     crs: L.CRS.EPSG4326,
-    layers: [aerial, terrain, DEM]
+    layers: [suitabilityPS,aerial, terrain, DEM]
 }).setView([-0.86930, 116.62068], 13);
 
 var baseMaps = {
@@ -34,10 +40,12 @@ var baseMaps = {
 };
 
 var overlayMaps = {
-    "DEM": DEM
+    "DEM": DEM,
+    "Suitability Sugar Palm" : suitabilityPS
 };
 
-L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+L.control.layers(baseMaps,overlayMaps).addTo(map);
 
 var outlineStyle =
 {
