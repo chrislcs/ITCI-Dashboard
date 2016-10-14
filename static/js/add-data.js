@@ -71,7 +71,6 @@ function addDataToXfilter(shape, shapeLanduse, FID, scenario, area) {
                         var startYear = currentRecipe['crops'][i]['startyear'];
                         var endYear = currentRecipe['crops'][i]['endyear'];
                         var areaFraction = currentRecipe['crops'][i]['area'] / 100.0;
-
                         if (y >= startYear && y <= endYear) {
                             cf.add([{
                                 "FID": FID,
@@ -80,7 +79,7 @@ function addDataToXfilter(shape, shapeLanduse, FID, scenario, area) {
                                 "landuse": shapeLanduse,
                                 "area": area,
                                 "crop": crop,
-                                "biomass": recipeData[crop][y - startYear + 1]["sum"] * efficiency * areaFraction,
+                                "biomass": recipeData[crop]["sum"] * cropfrac[crop][y - startYear] * efficiency * areaFraction,
                                 "distance_mean": distData['distance_mean'][1]["mean"],
                                 "jobs": currentRecipe['labor']
                             }]);
