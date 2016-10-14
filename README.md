@@ -15,8 +15,6 @@ In short: [Precalculated maximum crop yield per ha in database in raster format]
   - Improve graphs: Labels, layout?,....
   - Server based running of bio-physical module?
   - Visualization of background rasters (climate, soils, hydrology,...).
-  - Adding column in recipe table: Area per crop.
 
 # Bugs:
-  - Clicking the piechart and consequently adding a scenario will result in a bugged biomass per recipe chart and profit chart
-  - 
+  -

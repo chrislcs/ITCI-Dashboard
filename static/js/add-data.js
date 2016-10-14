@@ -100,9 +100,6 @@ function addDataToXfilter(shape, shapeLanduse, FID, scenario, area) {
                         }
                     }
                 }
-
-
-
             }
         }
     }

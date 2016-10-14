@@ -13,7 +13,7 @@ var areaChart = dc.pieChart("#area-chart");
 var biomassChart = dc.linkedRowChart("#biomass-chart");
 var jobsChart = dc.linkedRowChart("#jobs-chart");
 var indicatorPerRecipeChart = dc.barChart("#biomass-recipe-chart");
-var profitChart = dc.lineChart("#profit-chart");
+var profitChart = dc.compositeChart("#profit-chart");
 var biomassPerCropChart = dc.barChart("#biomass-crop-chart");
 var incomePerCropChart = dc.barChart("#income-crop-chart");
 
@@ -22,7 +22,7 @@ var chartList = [areaChart, biomassChart, jobsChart, indicatorPerRecipeChart, pr
 createPieChart(areaChart, landuseDim, areaSum);
 createLinkedRowChart(biomassChart, scenarioDim, biomassSum, syncGroup, "#33a02c");
 createLinkedRowChart(jobsChart, scenarioDim, jobsSum, syncGroup, "#1f78b4");
-createLineChart(profitChart, yearDim, incomeByYear, minYear, maxYear,'Year','\u20ac');
+createMultiLineChart(profitChart, yearDim, [incomeByYear, expenseByYear], minYear, maxYear);
 createLinearBarChart(indicatorPerRecipeChart, yearDim, biomassByRecipeStack, minYear, maxYear, 'Year','Metric Tonnes', recipeNames, recipeNames[0]);
 createLinearBarChart(biomassPerCropChart, yearDim, biomassByCropStack, minYear, maxYear, 'Year','Metric Tonnes', crops, crops[0]);
 createOrdinalBarChart(incomePerCropChart, cropDim, incomeByCrop, minYear, maxYear, false);
