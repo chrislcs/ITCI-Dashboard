@@ -20,10 +20,18 @@ function countItems(feature, key) {
 
 function loadRecipeDataFromDatabase(feature) {
     var currentRecipe = recipes[feature["properties"]["landuse"]]['crops'];
+    var uniqueCrops = [];
     var returnData = {};
     if(typeof currentRecipe != 'undefined') {
-        for (var i=0; i<currentRecipe.length; i++){
+        for (var i=0; i<currentRecipe.length; i++) {
             var currentCrop = currentRecipe[i].crop;
+            if (uniqueCrops.indexOf(currentCrop) === -1) {
+                uniqueCrops.push(currentCrop)
+            }
+        }
+
+        for (i=0; i<uniqueCrops.length; i++) {
+            currentCrop = uniqueCrops[i];
             returnData[currentCrop] = getUrlJsonSync('/retrieve_data', {
                 raster: currentCrop,
                 shape: JSON.stringify(feature.geometry)
@@ -70,7 +78,6 @@ function addDataToXfilter(shape, shapeLanduse, FID, scenario, area) {
                         var endYear = currentRecipe['crops'][i]['endyear'];
                         var areaFraction = currentRecipe['crops'][i]['area'] / 100.0;
                         if (y >= startYear && y <= endYear) {
-                            console.log(recipeData[crop][1]["sum"]);
                             cf.add([{
                                 "FID": FID,
                                 "year": y,
