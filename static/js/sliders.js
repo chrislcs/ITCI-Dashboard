@@ -31,7 +31,7 @@ $(function() {
                     return d.biomass * palmoilPrice ;
                 }
             });
-            createLineChart(profitChart, yearDim, incomeByYear, minYear, maxYear);
+            createMultiLineChart(profitChart, yearDim, incomeByYear, minYear, maxYear);
             createOrdinalBarChart(incomePerCropChart, cropDim, incomeByCrop, minYear, maxYear, false);
             dc.redrawAll();
         }
@@ -68,7 +68,7 @@ $(function() {
                     return d.biomass * palmoilPrice ;
                 }
             });
-            createLineChart(profitChart, yearDim, incomeByYear, minYear, maxYear);
+            createMultiLineChart(profitChart, yearDim, incomeByYear, minYear, maxYear);
             createOrdinalBarChart(incomePerCropChart, cropDim, incomeByCrop, minYear, maxYear, false);
             dc.redrawAll();
         }
@@ -105,7 +105,7 @@ $(function() {
                     return d.biomass * palmoilPrice ;
                 }
             });
-            createLineChart(profitChart, yearDim, incomeByYear, minYear, maxYear);
+            createMultiLineChart(profitChart, yearDim, incomeByYear, minYear, maxYear);
             createOrdinalBarChart(incomePerCropChart, cropDim, incomeByCrop, minYear, maxYear, false);
             dc.redrawAll();
         }
@@ -125,7 +125,7 @@ $(function() {
 //        stop: function(event, ui) {
 //            oilPrice = ui.value;
 //            incomeByYear = yearDim.group().reduceSum(function (d) { return d.biomass * biomassPrice - d.area * oilPrice * 0.01; });
-//            createLineChart(profitChart, yearDim, incomeByYear, minYear, maxYear);
+//            createMultiLineChart(profitChart, yearDim, incomeByYear, minYear, maxYear);
 //            dc.redrawAll();
 //        }
 //    });

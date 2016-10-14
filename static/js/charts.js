@@ -13,7 +13,7 @@ var areaChart = dc.pieChart("#area-chart");
 var biomassChart = dc.linkedRowChart("#biomass-chart");
 var jobsChart = dc.linkedRowChart("#jobs-chart");
 var indicatorPerRecipeChart = dc.barChart("#biomass-recipe-chart");
-var profitChart = dc.lineChart("#profit-chart");
+var profitChart = dc.compositeChart("#profit-chart");
 var biomassPerCropChart = dc.barChart("#biomass-crop-chart");
 var incomePerCropChart = dc.barChart("#income-crop-chart");
 
@@ -22,18 +22,18 @@ var chartList = [areaChart, biomassChart, jobsChart, indicatorPerRecipeChart, pr
 createPieChart(areaChart, landuseDim, areaSum);
 createLinkedRowChart(biomassChart, scenarioDim, biomassSum, syncGroup, "#33a02c");
 createLinkedRowChart(jobsChart, scenarioDim, jobsSum, syncGroup, "#1f78b4");
-createLineChart(profitChart, yearDim, incomeByYear, minYear, maxYear,'Year','\u20ac');
-createLinearBarChart(indicatorPerRecipeChart, yearDim, biomassByRecipeStack, minYear, maxYear, 'Year','Metric Tonnes', Object.keys(landuses[currentLayer]), Object.keys(landuses[currentLayer])[0]);
+createMultiLineChart(profitChart, yearDim, [incomeByYear, expenseByYear], minYear, maxYear);
+createLinearBarChart(indicatorPerRecipeChart, yearDim, biomassByRecipeStack, minYear, maxYear, 'Year','Metric Tonnes', recipeNames, recipeNames[0]);
 createLinearBarChart(biomassPerCropChart, yearDim, biomassByCropStack, minYear, maxYear, 'Year','Metric Tonnes', crops, crops[0]);
 createOrdinalBarChart(incomePerCropChart, cropDim, incomeByCrop, minYear, maxYear, false);
 
 // Add interactivity to the charts
 biomassChart.on('renderlet', function (chart) {
     function redrawBarChart() {
-        previousLayer = currentLayer;
-        currentLayer = biomassChart.filters()[0] - 1;
-        createLinearBarChart(indicatorPerRecipeChart, yearDim, biomassByRecipeStack, minYear, maxYear, 'Year', 'Metric Tonnes', landuses[currentLayer], Object.keys(landuses[currentLayer])[0]);
-        document.getElementById("by-year-bar-chart-title").innerHTML = "Biomass by year";
+        createLinearBarChart(indicatorPerRecipeChart, yearDim, biomassByRecipeStack, minYear, maxYear, 'Year', 'Metric Tonnes', recipeNames, recipeNames[0]);
+        createLinearBarChart(biomassPerCropChart, yearDim, biomassByCropStack, minYear, maxYear, 'Year','Metric Tonnes', crops, crops[0]);
+        document.getElementById("by-recipe-bar-chart-title").innerHTML = "Biomass by year";
+        document.getElementById("by-crop-bar-chart-title").innerHTML = "Biomass per crop";
         dc.redrawAll();
     }
 
@@ -42,6 +42,8 @@ biomassChart.on('renderlet', function (chart) {
 });
 
 biomassChart.on('postRedraw', function () {
+    previousLayer = currentLayer;
+    currentLayer = biomassChart.filters()[0] - 1;
     map.removeLayer(geolayers[previousLayer]);
     map.addLayer(geolayers[currentLayer]);
     legend = updateLegend(legend, Object.keys(landuses[currentLayer]));
@@ -50,10 +52,10 @@ biomassChart.on('postRedraw', function () {
 
 jobsChart.on('renderlet', function (chart) {
     function redrawBarChart() {
-        previousLayer = currentLayer;
-        currentLayer = biomassChart.filters()[0] - 1;
-        createLinearBarChart(indicatorPerRecipeChart, yearDim, jobsByYearStack, minYear, maxYear, 'Year', 'Metric Tonnes', landuses[currentLayer], Object.keys(landuses[currentLayer])[0]);
-        document.getElementById("by-year-bar-chart-title").innerHTML = "Annual Employment Rate";
+        createLinearBarChart(indicatorPerRecipeChart, yearDim, jobsByRecipeStack, minYear, maxYear, 'Year', '#', recipeNames, recipeNames[0]);
+        createLinearBarChart(biomassPerCropChart, yearDim, jobsByCropStack, minYear, maxYear, 'Year','#', crops, crops[0]);
+        document.getElementById("by-recipe-bar-chart-title").innerHTML = "Annual Employment Rate per Recipe";
+        document.getElementById("by-crop-bar-chart-title").innerHTML = "Annual Employment Rate per Crop";
         dc.redrawAll();
     }
 
@@ -62,6 +64,8 @@ jobsChart.on('renderlet', function (chart) {
 });
 
 jobsChart.on('postRedraw', function () {
+    previousLayer = currentLayer;
+    currentLayer = biomassChart.filters()[0] - 1;
     map.removeLayer(geolayers[previousLayer]);
     map.addLayer(geolayers[currentLayer]);
     legend = updateLegend(legend, Object.keys(landuses[currentLayer]));

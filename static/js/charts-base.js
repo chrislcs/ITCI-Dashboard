@@ -97,39 +97,18 @@ function createOrdinalBarChart(chart, dimension, group) {
     });
 }
 
-function createLineChart(chart, dimension, group, minX, maxX,xlabel,ylabel, stack, stackOn) {
+function createMultiLineChart(chart, dimension, groups, minX, maxX) {
+    var composeGroups = [];
+    for (var i=0; i<groups.length; i++) {
+        composeGroups.push(dc.lineChart(chart).group(groups[i]))
+    }
+
     chart
-        .x(d3.scale.linear().domain([minX, maxX]))
         //.y(d3.scale.linear().range([0, (chart.height() - 50)]).domain([minY, maxY]))
         .elasticY(true)
         //.interpolate('step-before')
-        .renderArea(false)
         .brushOn(false)
-        .renderDataPoints(false)
-        .clipPadding(10)
-        .yAxisLabel(ylabel)
-        .xAxisLabel(xlabel)
         .dimension(dimension)
-        .group(group)
-        .yAxis().tickFormat(d3.format("s"));
-
-    if (typeof(stack) !== 'undefined') {
-        function sel_stack(i) {
-            return function (d) {
-                return d.value[i];
-            };
-        }
-
-        chart
-            .group(group, stackOn, sel_stack(stackOn))
-            .title(function (d) {
-                return d.key + '[' + [this.layer] + ']: ' + d.value[this.layer];
-            });
-
-        for (var i=0; i<stack.length; i++) {
-            if (stack[i]!==stackOn) {
-                chart.stack(group, stack[i], sel_stack(stack[i]));
-            }
-        }
-    }
+        .x(d3.scale.linear().domain([minX, maxX]))
+        .compose(composeGroups);
 }

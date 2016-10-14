@@ -71,38 +71,35 @@ function addDataToXfilter(shape, shapeLanduse, FID, scenario, area) {
                         var startYear = currentRecipe['crops'][i]['startyear'];
                         var endYear = currentRecipe['crops'][i]['endyear'];
                         var areaFraction = currentRecipe['crops'][i]['area'] / 100.0;
+
+                        if (y >= startYear && y <= endYear) {
+                            cf.add([{
+                                "FID": FID,
+                                "year": y,
+                                "scenario": scenario,
+                                "landuse": shapeLanduse,
+                                "area": area,
+                                "crop": crop,
+                                "biomass": recipeData[crop][y - startYear + 1]["sum"] * efficiency * areaFraction,
+                                "distance_mean": distData['distance_mean'][1]["mean"],
+                                "jobs": currentRecipe['labor']
+                            }]);
+
+                        } else {
+                            cf.add([{
+                                "FID": FID,
+                                "year": y,
+                                "scenario": scenario,
+                                "landuse": shapeLanduse,
+                                "area": area,
+                                "crop": crop,
+                                "biomass": 0,
+                                "distance_mean": 0,
+                                "jobs": 0
+                            }]);
+                        }
                     }
                 }
-
-                if (y >= startYear && y <= endYear) {
-                    cf.add([{
-                        "FID": FID,
-                        "year": y,
-                        "scenario": scenario,
-                        "landuse": shapeLanduse,
-                        "area": area,
-                        "crop": crop,
-                        "biomass": recipeData[crop][y - startYear + 1]["sum"] * efficiency * areaFraction,
-                        "distance_mean": distData['distance_mean'][1]["mean"],
-                        "jobs": currentRecipe['labor']
-                    }]);
-
-                }
-
-                else {
-                    cf.add([{
-                        "FID": FID,
-                        "year": y,
-                        "scenario": scenario,
-                        "landuse": shapeLanduse,
-                        "area": area,
-                        "crop": crop,
-                        "biomass": 0,
-                        "distance_mean": 0,
-                        "jobs": 0
-                    }]);
-                }
-
             }
         }
     }

@@ -69,25 +69,25 @@ var recipes = {
                           {"crop":"SugarPalm", "startyear":3, "endyear":14, "area": 25, "efficiency":90},
                           {"crop":"SugarPalm", "startyear":6, "endyear":17, "area": 25, "efficiency":90},
                           {"crop":"SugarPalm", "startyear":9, "endyear":20, "area": 25, "efficiency":90},
-                          {"crop":"Cassava", "startyear":1, "endyear":3, "area": 75, "efficiency":20},
-                          {"crop":"Cassava", "startyear":3, "endyear":6, "area": 50, "efficiency":20},
-                          {"crop":"Cassava", "startyear":6, "endyear":9, "area": 25, "efficiency":20},
-                          {"crop":"Cassava", "startyear":11, "endyear":14, "area": 25, "efficiency":20},
-                          {"crop":"Cassava", "startyear":14, "endyear":17, "area": 50, "efficiency":20},
-                          {"crop":"Cassava", "startyear":17, "endyear":20, "area": 75, "efficiency":20}],
+                          {"crop":"Cassava", "startyear":1, "endyear":2, "area": 75, "efficiency":20},
+                          {"crop":"Cassava", "startyear":3, "endyear":5, "area": 50, "efficiency":20},
+                          {"crop":"Cassava", "startyear":6, "endyear":8, "area": 25, "efficiency":20},
+                          {"crop":"Cassava", "startyear":12, "endyear":14, "area": 25, "efficiency":20},
+                          {"crop":"Cassava", "startyear":15, "endyear":17, "area": 50, "efficiency":20},
+                          {"crop":"Cassava", "startyear":18, "endyear":20, "area": 75, "efficiency":20}],
                 "labor": 80},
     "Recipe 2":{"crops": [{"crop":"SugarPalm", "startyear":1, "endyear":11, "area": 50, "efficiency":90},
                           {"crop":"SugarPalm", "startyear":3, "endyear":14, "area": 50, "efficiency":90},
                           {"crop":"SugarPalm", "startyear":6, "endyear":17, "area": 25, "efficiency":90},
                           {"crop":"SugarPalm", "startyear":9, "endyear":20, "area": 25, "efficiency":90},
-                          {"crop":"Cassava", "startyear":1, "endyear":3, "area": 50, "efficiency":25},
-                          {"crop":"Cassava", "startyear":11, "endyear":14, "area": 50, "efficiency":25},
-                          {"crop":"Cassava", "startyear":14, "endyear":20, "area": 100, "efficiency":30}],
+                          {"crop":"Cassava", "startyear":1, "endyear":2, "area": 50, "efficiency":25},
+                          {"crop":"Cassava", "startyear":12, "endyear":14, "area": 50, "efficiency":25},
+                          {"crop":"Cassava", "startyear":15, "endyear":20, "area": 100, "efficiency":30}],
                 "labor": 40},
     "Recipe 3":{"crops": [{"crop":"SugarPalm", "startyear":1, "endyear":11, "area": 100, "efficiency":55},
                           {"crop":"Cassava", "startyear":1, "endyear":11, "area": 100, "efficiency":15},
-                          {"crop":"SugarPalm", "startyear":11, "endyear":20, "area": 100, "efficiency":45},
-                          {"crop":"SugarPalm", "startyear":11, "endyear":20, "area": 100, "efficiency":10}],
+                          {"crop":"SugarPalm", "startyear":12, "endyear":20, "area": 100, "efficiency":45},
+                          {"crop":"Cassava", "startyear":12, "endyear":20, "area": 100, "efficiency":10}],
                 "labor": 20},
     "Recipe 4":{"crops": [{"crop":"OilPalm", "startyear":1, "endyear":20, "area": 100, "efficiency":100}],
                 "labor": 10}
@@ -95,7 +95,7 @@ var recipes = {
 var recipeNames = Object.keys(recipes);
 var outline = loadShape('../static/data/ITCI_Boundary.geojson');
 var outlineInside = loadShape('../static/data/ITCI_Boundary_inside.geojson');
-var shapes = [loadShape('../static/data/Scenario2.geojson')];
+var shapes = [loadShape('../static/data/Scenario2.geojson'), loadShape('../static/data/Scenario1.geojson')];
 var FID = 0;
 var colorScale = d3.scale.category10();
 var lastClickedFeature;
