@@ -99,7 +99,9 @@ function removeFilters(dimensions, charts) {
     dimensions.forEach(function (dim) {
         dim.filter(null)
     });
-    charts.forEach(function (chart) {
-        chart.filter(null)
-    })
+    if (arguments.length > 1) {
+        charts.forEach(function (chart) {
+            chart.filter(null)
+        })
+    }
 }

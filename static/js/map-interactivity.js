@@ -40,7 +40,7 @@ map.on('draw:created', function (e) {
 
 map.on('draw:deleted', function (e) {
     // remove all current filters on dimensions and charts
-    removeFilters(dimensionList, chartList);
+    removeFilters(dimensionList);
 
     for (var layer in e.layers._layers) {
         if (e.layers._layers.hasOwnProperty(layer)) {
@@ -56,6 +56,12 @@ map.on('draw:deleted', function (e) {
         }
     }
     FIDDim.filterAll();
+
+    syncGroup.forEach(function (chart) {
+        chart.filterAll();
+        chart.filter(currentLayer + 1);
+        chart.filters().fill(currentLayer + 1);
+    });
 
     // redraw charts and legend
     dc.redrawAll();
@@ -77,14 +83,9 @@ $('#add-scenario').bind('click', function () {
 
     legend = updateLegend(legend, Object.keys(landuses[currentLayer]));
 
-    //var filterOnce;
     syncGroup.forEach(function (chart) {
-        //if (!filterOnce) {
-        //    filterOnce = true;
-            chart.filterAll();
-            chart.filter(currentLayer + 1);
-            //return;
-        //}
+        chart.filterAll();
+        chart.filter(currentLayer + 1);
         chart.filters().fill(currentLayer + 1);
     });
 
@@ -108,7 +109,7 @@ $('#mapid').on('click', '.edit', function () {
 
     if (Object.keys(recipes).indexOf(newLanduse)>=0) {
         // remove all current filters on dimensions and charts
-        removeFilters(dimensionList, chartList);
+        removeFilters(dimensionList);
 
         // update legend entries
         landuses[currentLayer][geolayers[currentLayer]._layers[lastClickedFeature].feature.properties.landuse]--;
@@ -133,10 +134,16 @@ $('#mapid').on('click', '.edit', function () {
         var area = FIDDim.top(1)[0].area;
         var scenario = FIDDim.top(1)[0].scenario;
         cf.remove();
+        FIDDim.filterAll();
 
         addDataToXfilter(geolayers[currentLayer]._layers[lastClickedFeature].feature, newLanduse, currentFID, scenario, area);
 
-        FIDDim.filterAll();
+        syncGroup.forEach(function (chart) {
+            chart.filterAll();
+            chart.filter(currentLayer + 1);
+            chart.filters().fill(currentLayer + 1);
+        });
+
         dc.redrawAll();
     } else if (newLanduse !== null) {
         alert('Recipe not found, check recipes tab for names')
