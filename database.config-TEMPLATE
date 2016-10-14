@@ -1,0 +1,5 @@
+database='database1'
+user='user1'
+password='123456'
+host='localhost'
+port=1234
