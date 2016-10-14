@@ -24,7 +24,7 @@ def read_db_config(fname):
     user = config.get('database', 'user')
     password = config.get('database', 'password')
     host = config.get('database', 'host')
-    port = int(config.get('database', 'port'))
+    port = config.getint('database', 'port')
 
     return [database, user, password, host, port]
 
