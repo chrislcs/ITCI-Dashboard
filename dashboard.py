@@ -29,8 +29,7 @@ def read_db_config(fname):
     return [database, user, password, host, port]
 
 
-def connect_to_db():
-    database_config = read_db_config('database.config')
+def connect_to_db(database_config):
     try:
         conn = psycopg2.connect(database=database_config[0],
                                 user=database_config[1],
@@ -47,22 +46,20 @@ def connect_to_db():
 @app.route("/retrieve_data")
 def retrieve_data():
     shape = request.args.get('shape', 0, type=str)
-    crop = request.args.get('crop', 0, type=str)
-    possible_crops = ['cassava', 'oilpalm', 'sugarpalm']
-    possible_other = ['transportdist_wgs']
-    if crop.lower() in possible_crops or crop.lower() in possible_other:
-        conn = connect_to_db()
+    raster = request.args.get('raster', 0, type=str)
+    possible_rasters = ['cassava', 'oilpalm', 'sugarpalm', 'transportdist_wgs']
+    if raster.lower() in possible_rasters:
+        database_config = read_db_config('database.config')
+        conn = connect_to_db(database_config)
         cur = conn.cursor()
 
         query = "WITH Raster AS (SELECT rast FROM itci.public.%s),"\
                     "Polygon AS(SELECT ST_SetSRID(ST_GeomFromGeoJSON(%s),"\
                     "4326) geom) SELECT ST_SummaryStats(ST_Union("\
-                    "ST_Clip(rast,geom)))"\
-                    "FROM Raster, Polygon;"
+                    "ST_Clip(rast,geom)))FROM Raster, Polygon;"
 
-        cur.execute(query, (AsIs(crop.lower()), shape))
+        cur.execute(query, (AsIs(raster.lower()), shape))
         tables = cur.fetchall()
-        print(tables)
         col_names = ['count', 'sum', 'mean', 'stdev', 'min', 'max']
         data = {}
         for i, t in enumerate(tables):
@@ -78,13 +75,12 @@ def retrieve_data():
 
             data[str(i+1)] = temp
 
-
         cur.close()
         conn.close()
 
         return jsonify(**data)
     else:
-        raise ValueError('Crop not in database.', crop)
+        raise ValueError('Raster not in database.', raster)
 
 
 if __name__ == '__main__':

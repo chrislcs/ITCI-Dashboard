@@ -22,11 +22,10 @@ function loadRecipeDataFromDatabase(feature) {
     var currentRecipe = recipes[feature["properties"]["landuse"]]['crops'];
     var returnData = {};
     if(typeof currentRecipe != 'undefined') {
-
         for (var i=0; i<currentRecipe.length; i++){
             var currentCrop = currentRecipe[i].crop;
             returnData[currentCrop] = getUrlJsonSync('/retrieve_data', {
-                crop: currentCrop,
+                raster: currentCrop,
                 shape: JSON.stringify(feature.geometry)
             });
             if (returnData[currentCrop].valid === "OK") {
@@ -36,7 +35,6 @@ function loadRecipeDataFromDatabase(feature) {
                 returnData[currentCrop] = 0;
             }
         }
-
     } else {
         console.log("ERROR: Recipe not found for feature with ID: " + FID + ", with land use:" + feature["properties"]["landuse"]);
     }
@@ -46,7 +44,7 @@ function loadRecipeDataFromDatabase(feature) {
 function loadDistanceDataFromDatabase(feature) {
     var returnData = {};
     returnData['distance_mean'] = getUrlJsonSync('/retrieve_data',{
-        crop: 'transportdist_wgs',
+        raster: 'transportdist_wgs',
         shape: JSON.stringify(feature.geometry)
     });
     if (returnData['distance_mean'].valid === "OK") {
@@ -132,7 +130,7 @@ function reloadData() {
 
     removeData(cf, dimensionList);
 
-    // Add data to  crossfilter
+    // Add data to crossfilter
     for (var i=0; i<geolayers.length; i++){
         Object.keys(geolayers[i]._layers).forEach(function (key, index) {
             retrieveData(geolayers[i]._layers[key]['feature'], i+1);
