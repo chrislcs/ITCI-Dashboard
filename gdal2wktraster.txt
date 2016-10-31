@@ -1,0 +1,3 @@
+raster2pgsql -r D:\Study\Borneo\Data_Brian\GIS_Data\Elevation\itcidem_wgs -t 100x100 -s 4326 -I > dem.sql
+
+psql -d itci -f dem.sql -U postgres -p 5433
