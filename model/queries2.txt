@@ -1,0 +1,8 @@
+SELECT ST_AsBinary((ST_DumpAsPolygons(rast)).geom), 
+        (ST_DumpAsPolygons(rast)).val
+ FROM dem
+ WHERE rid=1869;
+
+
+SELECT id, ST_AsBinary(geom)
+ FROM soil;
